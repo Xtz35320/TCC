@@ -106,6 +106,7 @@ if ($result_doc->num_rows > 0) {
       <li><a href="#about">Sobre</a></li>
       <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+      <li><a href="loginapoiador.php">Nos apoie!</a></li>
     </ul>
 </nav>
 
@@ -156,15 +157,7 @@ if ($result_doc->num_rows > 0) {
       </div>
     </div>
 
-    <div class="card">
-      <div class="info_planta">
-        <h1 class="titulo">Aplicações em Biotecnologia</h1>
-        <h3 class="texto">
-          <?php ?>
-        </h3>
-      </div>
-    </div>
-
+    
     <div class="card" id="video">
       <h1 class="titulo">Vídeo sobre <?php echo htmlspecialchars($nome_popular)?></h1>
       <iframe class="video"
@@ -290,6 +283,8 @@ if ($result_doc->num_rows > 0) {
 </div>
 
 <script src="../js/index.js?v=1"></script>
+
+
 
 </body>
 </html> 

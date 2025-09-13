@@ -33,6 +33,7 @@
               <li><a href="#about">Sobre</a></li>
               <li><a href="cadastro.php">Cadastro de plantas</a></li>
               <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+              <li><a href="loginapoiador.php">Nos apoie!</a></li>
             </ul>
         </nav>
 
