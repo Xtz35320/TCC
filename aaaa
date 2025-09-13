@@ -1,0 +1,433 @@
+<?php
+include_once '../sql/conexao.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Recebe dados principais da planta
+  $nome_popular = $_POST["nome_popular"];
+  $nome_cientifico = $_POST["nome_cientifico"];
+  $descricao = $_POST["descricao"];
+  $cuidados = $_POST["cuidados"];
+  $video_link = $_POST["video_link"];
+  
+  // Recebe dados de classificação
+  $reino = $_POST["reino"];
+  $divisao = $_POST["divisao"];
+  $classe = $_POST["classe"];
+  $ordem = $_POST["ordem"];
+  $familia = $_POST["familia"];
+  $genero = $_POST["genero"];
+  $especie = $_POST["especie"];
+  $estados = $_POST["estados"];
+
+  // Insere planta
+  $stmt = $conn->prepare("INSERT INTO planta (nome_popular, nome_cientifico, descricao, cuidados, video_link, reino, divisao, classe, ordem, familia, genero, especie, estados) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+  $stmt->bind_param("sssssssssssss", $nome_popular, $nome_cientifico, $descricao, $cuidados, $video_link, $reino, $divisao, $classe, $ordem, $familia, $genero, $especie, $estados);
+
+  if ($stmt->execute()) {
+    $planta_id = $conn->insert_id;
+
+    // === UPLOAD DA IMAGEM ===
+    if (!empty($_FILES['imagem']['name'][0])) {
+      // Cria pasta, se não existir
+      if (!is_dir('uploads/imagens')) {
+        mkdir('uploads/imagens', 0777, true);
+      }
+
+      $total = count($_FILES['imagem']['name']);
+      for ($i = 0; $i < $total; $i++) {
+        $nome_original = $_FILES['imagem']['name'][$i];
+        $tmp_name = $_FILES['imagem']['tmp_name'][$i];
+        $nome_limpo = preg_replace('/[^\w\.-]/', '_', basename($nome_original));
+        $destino = "uploads/imagens/" . $nome_limpo;
+
+        if (move_uploaded_file($tmp_name, $destino)) {
+          // Salva no banco
+          $desc_img = "Imagem enviada automaticamente";
+          $sqlImg = $conn->prepare("INSERT INTO imagens (planta_id, caminho_imagem, descricao) VALUES (?, ?, ?)");
+          $sqlImg->bind_param("iss", $planta_id, $destino, $desc_img);
+          $sqlImg->execute();
+        }
+      }
+    }
+
+    // === UPLOAD DO PDF ===
+    if (isset($_FILES['documento']) && $_FILES['documento']['error'] == 0) {
+      $pdf_nome = basename($_FILES["documento"]["name"]);
+      $pdf_destino = "../assets/artigos/" . $pdf_nome;
+      if (move_uploaded_file($_FILES["documento"]["tmp_name"], $pdf_destino)) {
+        $titulo_pdf = $_POST["titulo_documento"];
+        $tipo_pdf = $_POST["tipo_documento"];
+        $sqlDoc = $conn->prepare("INSERT INTO documentos (planta_id, tipo, titulo, link_pdf) VALUES (?, ?, ?, ?)");
+        $sqlDoc->bind_param("isss", $planta_id, $tipo_pdf, $titulo_pdf, $pdf_destino);
+        $sqlDoc->execute();
+      }
+    }
+
+    echo "<div class='success'>Planta cadastrada com sucesso!</div>";
+  } else {
+    echo "<div class='error'>Erro ao cadastrar planta: " . $stmt->error . "</div>";
+  }
+
+  $stmt->close();
+}
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Planta</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/mapa.css">
+  <style>
+    /* Estilos específicos para o formulário de cadastro */
+    .form-cadastro-container {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 55px);
+      padding: 20px;
+      margin-top: 55px;
+    }
+    
+    .h2c {
+      text-align: center;
+      color: #e0e0e0;
+      margin: 20px 0;
+      font-size: 32px;
+    }
+    
+    .form-cadastro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex-grow: 1;
+    }
+    
+    @media (max-width: 1200px) {
+      .form-cadastro-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-section {
+      background-color: #1e1e1e;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+    
+    .form-section h3 {
+      color: #f39c12;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #333;
+      font-size: 22px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e0e0e0;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      background-color: #161616;
+      font-size: 15px;
+      border: 1px solid #333;
+      color: #e0e0e0;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #1c7924;
+      outline: none;
+    }
+    
+    .caracteristicas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    @media (max-width: 768px) {
+      .caracteristicas-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .mapa-section {
+      min-height: 400px;
+    }
+    
+    .btn-container {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .btn_cadastro {
+      background-color: #1c7924;
+      color: white;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .btn_cadastro:hover {
+      background-color: #40916c;
+    }
+    
+    .estados-selecionados {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #161616;
+      border-radius: 8px;
+      min-height: 50px;
+    }
+    
+    .estado-tag {
+      display: inline-block;
+      background-color: #1c7924;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin: 5px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav id="menu">
+    <ul class="menu-list">
+      <li><a href="index.php">Início</a></li>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="cadastro.php">Cadastro de plantas</a></li>
+    </ul>
+    <div class="search-container">
+      <form class="search-form">
+        <input type="text" placeholder="Pesquisar..." class="search-input">
+        <button type="submit" class="search-button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="form-cadastro-container">
+    <h2 class="h2c">Cadastro de Planta</h2>
+    
+    <form class="form-cadastro-grid" method="POST" action="" enctype="multipart/form-data">
+      <!-- Seção 1: Informações Básicas -->
+      <div class="form-section">
+        <h3>Informações Básicas</h3>
+        
+        <div class="form-group">
+          <label for="nome_popular">Nome Popular:</label>
+          <input type="text" name="nome_popular" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="nome_cientifico">Nome Científico:</label>
+          <input type="text" name="nome_cientifico" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="descricao">Descrição:</label>
+          <textarea name="descricao" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="cuidados">Cuidados:</label>
+          <textarea name="cuidados" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="video_link">Link do Vídeo (YouTube):</label>
+          <input type="text" name="video_link">
+        </div>
+      </div>
+      
+      <!-- Seção 2: Classificação Taxonômica -->
+      <div class="form-section">
+        <h3>Classificação Taxonômica</h3>
+        
+        <div class="caracteristicas-grid">
+          <div class="form-group">
+            <label for="reino">Reino:</label>
+            <input type="text" name="reino" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="divisao">Divisão:</label>
+            <input type="text" name="divisao" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="classe">Classe:</label>
+            <input type="text" name="classe" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="ordem">Ordem:</label>
+            <input type="text" name="ordem" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="familia">Família:</label>
+            <input type="text" name="familia" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="genero">Gênero:</label>
+            <input type="text" name="genero" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="especie">Espécie:</label>
+            <input type="text" name="especie" required>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Seção 3: Mapa de Distribuição -->
+      <div class="form-section full-width">
+        <h3>Distribuição Geográfica</h3>
+        <p>Selecione os estados onde esta planta é encontrada:</p>
+        
+        <div id="mapa-container">
+          <!-- O mapa do Brasil será inserido aqui pelo JavaScript -->
+        </div>
+        
+        <div class="estados-selecionados" id="estados-visual">
+          <p>Nenhum estado selecionado</p>
+        </div>
+        
+        <input type="hidden" name="estados" id="estadosSelecionados">
+      </div>
+      
+      <!-- Seção 4: Upload de Imagens -->
+      <div class="form-section">
+        <h3>Imagens da Planta</h3>
+        
+        <div class="form-group">
+          <label for="imagem">Selecionar imagens (JPG/PNG):</label>
+          <input type="file" name="imagem[]" accept="image/*" multiple>
+        </div>
+      </div>
+      
+      <!-- Seção 5: Documentos -->
+      <div class="form-section">
+        <h3>Documentos Relacionados</h3>
+        
+        <div class="form-group">
+          <label for="documento">Documento (PDF):</label>
+          <input type="file" name="documento" accept="application/pdf">
+        </div>
+        
+        <div class="form-group">
+          <label for="titulo_documento">Título do documento:</label>
+          <input type="text" name="titulo_documento">
+        </div>
+        
+        <div class="form-group">
+          <label for="tipo_documento">Tipo do documento:</label>
+          <select name="tipo_documento">
+            <option value="Artigo Científico">Artigo Científico</option>
+            <option value="Guia de Cultivo">Guia de Cultivo</option>
+            <option value="Pesquisa Genética">Pesquisa Genética</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Botão de Envio -->
+      <div class="btn-container">
+        <button class="btn_cadastro" type="submit">Cadastrar Planta</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Inicialização do mapa e funcionalidade de seleção de estados
+    document.addEventListener('DOMContentLoaded', function() {
+      const selecionados = new Set();
+      const inputHidden = document.getElementById("estadosSelecionados");
+      const estadosVisual = document.getElementById("estados-visual");
+      
+      // Carregar o mapa do Brasil (substitua pelo seu código de mapa real)
+      // Esta é uma implementação simplificada para demonstração
+      const mapaContainer = document.getElementById('mapa-container');
+      
+      // Adicionar um placeholder para o mapa
+      mapaContainer.innerHTML = `
+        <div style="text-align: center; padding: 40px; background: #161616; border-radius: 8px;">
+          <p style="color: #e0e0e0; font-size: 18px; margin-bottom: 15px;">Mapa do Brasil interativo aparecerá aqui</p>
+          <p style="font-size: 14px; color: #999;">Clique nos estados para selecionar onde esta planta é encontrada</p>
+          
+          <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            ${['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
+               'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 
+               'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO'].map(uf => `
+              <button type="button" class="estado-btn" data-uf="${uf}" 
+                style="padding: 8px 15px; background: #333; border: none; border-radius: 5px; color: #e0e0e0; cursor: pointer;">
+                ${uf}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      
+      // Adicionar event listeners aos botões de estado
+      document.querySelectorAll('.estado-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const uf = this.getAttribute('data-uf');
+          
+          if (selecionados.has(uf)) {
+            selecionados.delete(uf);
+            this.style.backgroundColor = '#333';
+          } else {
+            selecionados.add(uf);
+            this.style.backgroundColor = '#1c7924';
+          }
+          
+          // Atualizar o input hidden
+          inputHidden.value = Array.from(selecionados).join(",");
+          
+          // Atualizar a visualização
+          if (selecionados.size > 0) {
+            estadosVisual.innerHTML = Array.from(selecionados).map(uf => 
+              `<span class="estado-tag">${uf}</span>`
+            ).join('');
+          } else {
+            estadosVisual.innerHTML = '<p>Nenhum estado selecionado</p>';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
