@@ -84,7 +84,7 @@ $conn->close();
   <link rel="stylesheet" href="../css/mapa.css">
   <style>
     /* Estilos específicos para o formulário de cadastro */
-    .form-cadastro-container {
+    .form-cadastro-planta-container {
       display: flex;
       flex-direction: column;
       min-height: calc(100vh - 55px);
@@ -99,7 +99,7 @@ $conn->close();
       font-size: 32px;
     }
     
-    .form-cadastro-grid {
+    .form-cadastro-planta-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
@@ -107,7 +107,7 @@ $conn->close();
     }
     
     @media (max-width: 1200px) {
-      .form-cadastro-grid {
+      .form-cadastro-planta-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -237,10 +237,10 @@ $conn->close();
     </div>
   </nav>
 
-  <div class="form-cadastro-container">
+  <div class="form-cadastro-planta-container">
     <h2 class="h2c">Cadastro de Planta</h2>
     
-    <form class="form-cadastro-grid" method="POST" action="" enctype="multipart/form-data">
+    <form class="form-cadastro-planta-grid" method="POST" action="" enctype="multipart/form-data">
       <!-- Seção 1: Informações Básicas -->
       <div class="form-section">
         <h3>Informações Básicas</h3>

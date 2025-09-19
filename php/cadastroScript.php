@@ -154,7 +154,7 @@ try {
     }
     
     // Redirecionar com mensagem de erro
-    header('Location: cadastro.php?error=' . urlencode($e->getMessage()));
+    header('Location: ../page/cadastro.php?error=' . urlencode($e->getMessage()));
     exit;
 }
 ?>

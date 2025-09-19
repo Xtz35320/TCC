@@ -30,6 +30,12 @@ $imagem = null;
 if ($result_img && $result_img->num_rows > 0) {
   $imagem = $result_img->fetch_assoc(); // pega só a primeira linha
 }
+
+
+
+include_once '../php/loginapoiador.php';
+
+
 ?>
 
 
@@ -50,7 +56,10 @@ if ($result_img && $result_img->num_rows > 0) {
     <ul class="menu-list">
       <li><a href="#" class="active">Início</a></li>
       <li><a href="#about">Sobre</a></li>
-      <li><a href="cadastro.php">Cadastro de plantas</a></li>
+      <?php if (!isset($_SESSION['apoiador_id'])): ?>
+        <?php else: ?>
+          <li><a href="cadastro.php">Cadastro de plantas</a></li>
+      <?php endif; ?>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
       <li><a href="loginapoiador.php">Nos apoie!</a></li>
     </ul>
@@ -65,7 +74,7 @@ if ($result_img && $result_img->num_rows > 0) {
         </button>
       </form>
     </div>
-
+          
 
   </nav>
 

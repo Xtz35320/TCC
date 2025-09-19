@@ -636,7 +636,7 @@ body {
   margin-bottom: 20px;
 }
 
-.form-cadastro {
+.form-cadastro-planta {
   background-color: #1e1e1e;
   padding: 25px;
   border-radius: 15px;
@@ -647,7 +647,7 @@ body {
 
 }
 
-.form-cadastro>label {
+.form-cadastro-planta>label {
   display: block;
   margin-top: 15px;
   color: #e0e0e0;
@@ -852,4 +852,31 @@ svg {
 
 .activ{
   color: #f39c12;
+}
+
+
+/* =========================
+    apoiador
+   ========================= */
+
+   .form-apoiador {
+  background-color: #1e1e1e;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  max-width: 750px;
+  margin-inline: auto;
+  color: #e0e0e0;
+
+}
+
+.form-apoiador>label {
+  display: block;
+  margin-top: 15px;
+  color: #e0e0e0;
+}
+
+.form-login{
+  align-items: center;
+  justify-content: center;
 }

@@ -7,7 +7,7 @@
   <title>Cadastro de Apoiador | Botan Mind</title>
   <link rel="stylesheet" href="../css/style.css?v=1" />
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
-  
+
 </head>
 
 <body>
@@ -33,17 +33,17 @@
   </nav>
 
   <main style="margin-top:80px; min-height:60vh;">
-    <div class="form-cadastro" style="max-width:500px; margin:60px auto;">
+    <div class="form-apoiador" style="max-width:500px; margin:60px auto;">
       <h2 class="h2c">Cadastro de Apoiador</h2>
-   <form action="loginapoiador.php" method="post" enctype="multipart/form-data">
-  <label>Nome: <input type="text" name="nome" required></label><br>
-  <label>Email: <input type="email" name="email" required></label><br>
-  <label>CPF: <input type="text" name="cpf" required></label><br>
-  <label>Emprego: <input type="text" name="emprego"></label><br>
-  <label>Senha: <input type="password" name="senha" required></label><br>
-  <label>Imagem (opcional): <input type="file" name="imagem" accept="image/*"></label><br>
-  <button type="submit">Cadastrar</button>
-</form>
+      <form class="form-login" action="cadastroapoiador.php" method="POST" enctype="multipart/form-data">
+        <label>Nome: <input type="text" name="nome" required></label><br>
+        <label>Email: <input type="email" name="email" required></label><br>
+        <label>CPF: <input type="text" name="cpf" required></label><br>
+        <label>Emprego: <input type="text" name="emprego"></label><br>
+        <label>Senha: <input type="password" name="senha" required></label><br>
+        <label>Imagem (opcional): <input type="file" name="imagem" accept="image/*"></label><br>
+        <button type="submit" class="btn_cadastro" style="width:100%;">Cadastrar</button>
+      </form>
       <hr>
       <p style="text-align:center; margin-top:10px;">
         Já é apoiador? <a href="loginapoiador.php" style="color:#1c7924;">Faça login</a>
@@ -108,5 +108,48 @@
     <p>© 2024 Plantcare. Todos os direitos reservados.</p>
   </footer>
 
-  
-  
+
+  <?php
+include_once '../sql/conexao.php'; // arquivo que faz a conexão com o banco (ajuste o caminho se necessário)
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = $_POST['nome'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $cpf = $_POST['cpf'] ?? '';
+    $emprego = $_POST['emprego'] ?? '';
+    $senha = $_POST['senha'] ?? '';
+    $imagem = '';
+
+    // Upload da imagem do apoiador
+    if (!empty($_FILES['imagem']['name'])) {
+        $pasta = 'uploads/';
+        if (!is_dir($pasta)) {
+            mkdir($pasta, 0777, true);
+        }
+        $nomeArquivo = uniqid() . '_' . basename($_FILES['imagem']['name']);
+        $caminhoDestino = $pasta . $nomeArquivo;
+
+        if (move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoDestino)) {
+            $imagem = $caminhoDestino;
+        }
+    }
+
+    // Criptografa a senha
+    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO apoiador (nome, email, cpf, emprego, imagem, senha)
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssss", $nome, $email, $cpf, $emprego, $imagem, $senhaHash);
+
+    if ($stmt->execute()) {
+        echo json_encode(["status" => "success", "message" => "Apoiador cadastrado com sucesso!"]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Erro ao cadastrar: " . $stmt->error]);
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>

@@ -1,3 +1,19 @@
+<?php
+include_once '../sql/conexao.php';
+include_once '../php/loginapoiador.php';
+
+$id = $_SESSION['apoiador_id'];
+
+$sql_apoiador = "SELECT nome FROM apoiador WHERE id = $id";
+$result_apoiador = $conn->query($sql_apoiador);
+
+$nome = "";
+if ($result_apoiador->num_rows > 0) {
+  $row = $result_apoiador->fetch_assoc();
+  $nome = $row['nome'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -12,13 +28,14 @@
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
       padding: 0;
       overflow-x: hidden;
     }
 
-    .form-cadastro-container {
+    .form-cadastro-planta-container {
       display: flex;
       flex-direction: column;
       min-height: calc(100vh - 55px);
@@ -36,7 +53,7 @@
       font-size: 32px;
     }
 
-    .form-cadastro-grid {
+    .form-cadastro-planta-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
@@ -45,7 +62,7 @@
     }
 
     @media (max-width: 1200px) {
-      .form-cadastro-grid {
+      .form-cadastro-planta-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -160,9 +177,10 @@
       margin: 5px;
       font-size: 14px;
     }
+
     /* Melhorias para dispositivos muito pequenos */
     @media (max-width: 480px) {
-      .form-cadastro-container {
+      .form-cadastro-planta-container {
         padding: 10px;
       }
 
@@ -202,19 +220,21 @@
       transition: 300ms;
     }
 
-    
+
 
     /* NOVOS ESTILOS PARA HOVER NOS ESTADOS */
     #mapa-container path.estado {
       transition: all 0.3s ease;
       cursor: pointer;
     }
+
     #mapa-container path.estado:hover {
       fill: #1c7924 !important;
       stroke: #fff;
       stroke-width: 1.5;
       filter: drop-shadow(0 0 5px rgba(26, 116, 34, 0.7));
     }
+
     #mapa-container path.estado.active:hover {
       fill: #e67e22 !important;
       filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
@@ -223,6 +243,7 @@
     #mapa-container path.estado.active {
       filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
     }
+
     .estado-btn {
       padding: 8px 15px;
       background: #333;
@@ -304,43 +325,45 @@
         </button>
       </form>
     </div>
+    <h5><?php echo htmlspecialchars($nome) ?></h5>
+
   </nav>
-  
+
   <!-- Botão de Preenchimento Automático -->
-<div class="btn-container" style="margin-top: 50px;">
-  <button type="button" class="btn_cadastro" onclick="preencherFormulario()">Preencher Automaticamente</button>
-  <button class="btn_cadastro" type="submit">Cadastrar Planta</button>
-</div>
+  <div class="btn-container" style="margin-top: 50px;">
+    <button type="button" class="btn_cadastro" onclick="preencherFormulario()">Preencher Automaticamente</button>
+    <button class="btn_cadastro" type="submit">Cadastrar Planta</button>
+  </div>
 
-<script>
-function preencherFormulario() {
-  // Campos de texto simples
-  document.querySelector('[name="nome_popular"]').value = "Teste automatizado";
-  document.querySelector('[name="nome_cientifico"]').value = "Teste automatizado";
-  document.querySelector('[name="descricao"]').value = "Teste automatizado";
-  document.querySelector('[name="cuidados"]').value = "Teste automatizado";
-  document.querySelector('[name="video_link"]').value = "https://www.youtube.com/embed/8P-zRYfbmYQ?si=6jNfJNS8_dog89H0";
+  <script>
+    function preencherFormulario() {
+      // Campos de texto simples
+      document.querySelector('[name="nome_popular"]').value = "Teste automatizado";
+      document.querySelector('[name="nome_cientifico"]').value = "Teste automatizado";
+      document.querySelector('[name="descricao"]').value = "Teste automatizado";
+      document.querySelector('[name="cuidados"]').value = "Teste automatizado";
+      document.querySelector('[name="video_link"]').value = "https://www.youtube.com/embed/8P-zRYfbmYQ?si=6jNfJNS8_dog89H0";
 
-  // Classificação taxonômica
-  document.querySelector('[name="reino"]').value = "Teste automatizado";
-  document.querySelector('[name="divisao"]').value = "Teste automatizado";
-  document.querySelector('[name="classe"]').value = "Teste automatizado";
-  document.querySelector('[name="ordem"]').value = "Teste automatizado";
-  document.querySelector('[name="familia"]').value = "Teste automatizado";
-  document.querySelector('[name="genero"]').value = "Teste automatizado";
-  document.querySelector('[name="especie"]').value = "Teste automatizado";
+      // Classificação taxonômica
+      document.querySelector('[name="reino"]').value = "Teste automatizado";
+      document.querySelector('[name="divisao"]').value = "Teste automatizado";
+      document.querySelector('[name="classe"]').value = "Teste automatizado";
+      document.querySelector('[name="ordem"]').value = "Teste automatizado";
+      document.querySelector('[name="familia"]').value = "Teste automatizado";
+      document.querySelector('[name="genero"]').value = "Teste automatizado";
+      document.querySelector('[name="especie"]').value = "Teste automatizado";
 
-  // Documento (apenas título e tipo, sem arquivo)
-  document.querySelector('[name="titulo_documento"]').value = "Teste automatizado";
-  document.querySelector('[name="tipo_documento"]').value = "Teste automatizado";
-}
-</script>
+      // Documento (apenas título e tipo, sem arquivo)
+      document.querySelector('[name="titulo_documento"]').value = "Teste automatizado";
+      document.querySelector('[name="tipo_documento"]').value = "Teste automatizado";
+    }
+  </script>
 
 
-  <div class="form-cadastro-container">
+  <div class="form-cadastro-planta-container">
     <h2 class="h2c">Cadastro de Planta</h2>
 
-    <form class="form-cadastro-grid" method="POST" action="../php/cadastroScript.php" enctype="multipart/form-data">
+    <form class="form-cadastro-planta-grid" method="POST" action="../php/cadastroScript.php" enctype="multipart/form-data">
       <!-- Seção 1: Informações Básicas -->
       <div class="form-section">
         <h3>Informações Básicas</h3>
@@ -422,7 +445,7 @@ function preencherFormulario() {
           <!-- O mapa do Brasil será inserido aqui pelo JavaScript -->
         </div>
 
-        
+
         <input type="hidden" name="estados" id="estadosSelecionados" disabled>
       </div>
 
@@ -531,16 +554,37 @@ function preencherFormulario() {
   <script>
     // Mapeamento de UF para ID do path no SVG
     const ufToIdMap = {
-      'AC': '1', 'AL': '2', 'AM': '4', 'AP': '3', 'BA': '5',
-      'CE': '6', 'DF': '7', 'ES': '8', 'GO': '9', 'MA': '10',
-      'MG': '13', 'MS': '12', 'MT': '11', 'PA': '14', 'PB': '15',
-      'PE': '17', 'PI': '18', 'PR': '16', 'RJ': '19', 'RN': '20',
-      'RO': '22', 'RR': '23', 'RS': '21', 'SC': '24', 'SE': '26',
-      'SP': '25', 'TO': '27'
+      'AC': '1',
+      'AL': '2',
+      'AM': '4',
+      'AP': '3',
+      'BA': '5',
+      'CE': '6',
+      'DF': '7',
+      'ES': '8',
+      'GO': '9',
+      'MA': '10',
+      'MG': '13',
+      'MS': '12',
+      'MT': '11',
+      'PA': '14',
+      'PB': '15',
+      'PE': '17',
+      'PI': '18',
+      'PR': '16',
+      'RJ': '19',
+      'RN': '20',
+      'RO': '22',
+      'RR': '23',
+      'RS': '21',
+      'SC': '24',
+      'SE': '26',
+      'SP': '25',
+      'TO': '27'
     };
 
     // Inicialização do mapa e funcionalidade de seleção de estados
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       const selecionados = new Set();
       const inputHidden = document.getElementById("estadosSelecionados");
       const estadosVisual = document.getElementById("estados-visual");
@@ -682,7 +726,7 @@ function preencherFormulario() {
         inputHidden.value = Array.from(selecionados).join(",");
 
         // Atualizar a visualização
-        if (!selecionados.size > 0){
+        if (!selecionados.size > 0) {
           estadosVisual.innerHTML = '<p>Nenhum estado selecionado</p>';
         }
       }
@@ -722,7 +766,7 @@ function preencherFormulario() {
 
       // Adicionar event listeners aos botões de estado
       document.querySelectorAll('.estado-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
           const uf = this.getAttribute('data-uf');
           const estaSelecionado = selecionados.has(uf);
           atualizarEstado(uf, !estaSelecionado);
@@ -730,20 +774,19 @@ function preencherFormulario() {
       });
 
       // Event listener para mover o tooltip com o mouse
-      document.addEventListener('mousemove', function (e) {
+      document.addEventListener('mousemove', function(e) {
         description.style.left = e.pageX + "px";
         description.style.top = (e.pageY - 70) + "px";
       });
 
       // Event listener para o formulário
-      const form = document.querySelector('.form-cadastro-grid');
-      form.addEventListener('submit', function () {
+      const form = document.querySelector('.form-cadastro-planta-grid');
+      form.addEventListener('submit', function() {
         if (inputHidden.value) {
           inputHidden.disabled = false;
         }
       });
     });
-    
   </script>
 </body>
 

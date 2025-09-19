@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -33,9 +35,9 @@
   </nav>
 
   <main style="margin-top:80px; min-height:60vh;">
-    <div class="form-cadastro" style="max-width:400px; margin:60px auto;">
+    <div class="form-apoiador" style="max-width:400px; margin:60px auto;">
       <h2 class="h2c">Login do Apoiador</h2>
-      <form action="processa_loginapoiador.php" method="post">
+      <form action="../php/loginapoiador.php" method="post">
         <label for="email">E-mail</label>
         <input type="email" id="email" name="email" required autocomplete="username">
 
@@ -93,3 +95,4 @@
   </footer>
 </body>
 <script src="../js/index.js?v
+
