@@ -21,11 +21,11 @@ if ($usuario_db && password_verify($senha_digitada, $usuario_db['senha'])) {
     $_SESSION['usuario'] = $usuario_db['usuario'];
 
     // Redirecionar para a página protegida
-    header("Location: pagina_protegida.php");
+    header("Location: ../page/loginapoiador.php");
     exit(); // Essencial para parar a execução
 } else {
     // Credenciais inválidas
     echo "<script>alert('Usuário ou senha inválidos.');</script>";
-    echo "<script>window.location.href='login.html';</script>"; // Retorna para o login
+    echo "<script>window.location.href='../page/loginapoiador.php';</script>"; // Retorna para o login
 }
 ?>

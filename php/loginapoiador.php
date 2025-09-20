@@ -36,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<script>alert('Login realizado com sucesso!'); window.location.href='../page/index.php';</script>";
                 exit;
             } else {
-                echo "<script>alert('Senha incorreta.');</script>";
+                echo "<script>alert('E-mail ou senha incorreta.'); window.location.href='../page/loginapoiador.php';</script>";
             }
         } else {
-            echo "<script>alert('E-mail não encontrado.');</script>";
+            echo "<script>alert('E-mail ou senha incorreta.'); window.location.href='../page/loginapoiador.php';</script>";
         }
 
         $stmt->close();

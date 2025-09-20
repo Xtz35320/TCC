@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -17,7 +15,6 @@
     <ul class="menu-list">
       <li><a href="./index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
-      <li><a href="./cadastro.php">Cadastro de plantas</a></li>
       <li><a href="./ListaPlantas.php">Lista de plantas</a></li>
       <li><a href="./loginapoiador.php" class="active">Nos apoie!</a></li>
     </ul>
@@ -59,16 +56,32 @@
         <img src="../assets/img/logo.png" class="logo-img" alt="">
       </div>
       <div class="paginas-rodape">
-        <a href="#"><h5>Início</h5></a>
-        <a href="ListaPlantas.php"><h5>Lista de planta</h5></a>
-        <a href="sobre.php"><h5>Sobre</h5></a>
-        <a href="contato.php"><h5>Contato</h5></a>
+        <a href="#">
+          <h5>Início</h5>
+        </a>
+        <a href="ListaPlantas.php">
+          <h5>Lista de planta</h5>
+        </a>
+        <a href="sobre.php">
+          <h5>Sobre</h5>
+        </a>
+        <a href="contato.php">
+          <h5>Contato</h5>
+        </a>
       </div>
       <div class="paginas-rodape">
-        <a href="#"><h5>Início</h5></a>
-        <a href="ListaPlantas.php"><h5>Lista de planta</h5></a>
-        <a href="sobre.php"><h5>Sobre</h5></a>
-        <a href="contato.php"><h5>Contato</h5></a>
+        <a href="#">
+          <h5>Início</h5>
+        </a>
+        <a href="ListaPlantas.php">
+          <h5>Lista de planta</h5>
+        </a>
+        <a href="sobre.php">
+          <h5>Sobre</h5>
+        </a>
+        <a href="contato.php">
+          <h5>Contato</h5>
+        </a>
       </div>
       <div class="redes-sociais">
         <a href="https://www.instagram.com/botanmind9">
@@ -95,4 +108,3 @@
   </footer>
 </body>
 <script src="../js/index.js?v
-

@@ -188,3 +188,9 @@ INSERT INTO `planta_estado` (`id_planta`, `id_estado`) VALUES
 (25, 25),
 (25, 26),
 (25, 27);
+
+
+
+INSERT INTO `apoiador` (`id`, `nome`, `email`, `cpf`, `emprego`, `imagem`, `senha`) VALUES
+(2, 'admin', 'admin@gmail.com', '12345678910', 'admin', '', '$2y$10$i4CdvTti9bHx7azElvZNw.aSFZspBGhSW7AJqH5odalPLugW6Mbv.'),
+(6, 'teste', 'teste@gmail.com', '12345678910', 'admin', '', '$2y$10$RxzNmzVylqbt86C/lq45eeKAdF6ooV/1uxbejphjM4XIJhZpRDy.2');

@@ -4,14 +4,16 @@ include_once '../php/loginapoiador.php';
 
 $id = $_SESSION['apoiador_id'];
 
-$sql_apoiador = "SELECT nome FROM apoiador WHERE id = $id";
-$result_apoiador = $conn->query($sql_apoiador);
+  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
 
-$nome = "";
-if ($result_apoiador->num_rows > 0) {
-  $row = $result_apoiador->fetch_assoc();
-  $nome = $row['nome'];
-}
+  $nome = "";
+  $imagem = "";
+  if ($result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
 ?>
 
 <!DOCTYPE html>
@@ -325,7 +327,11 @@ if ($result_apoiador->num_rows > 0) {
         </button>
       </form>
     </div>
-    <h5><?php echo htmlspecialchars($nome) ?></h5>
+
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+      <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+    </div>
 
   </nav>
 

@@ -35,6 +35,26 @@ if ($result_img && $result_img->num_rows > 0) {
 
 include_once '../php/loginapoiador.php';
 
+if (!isset($_SESSION['apoiador_id'])) {
+
+  $nome = "";
+} else {
+
+  $id = $_SESSION['apoiador_id'];
+
+
+  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
+
+  $nome = "";
+  $imagem = "";
+  if ($result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
+}
+
 
 ?>
 
@@ -57,8 +77,8 @@ include_once '../php/loginapoiador.php';
       <li><a href="#" class="active">Início</a></li>
       <li><a href="#about">Sobre</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
-        <?php else: ?>
-          <li><a href="cadastro.php">Cadastro de plantas</a></li>
+      <?php else: ?>
+        <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <?php endif; ?>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
       <li><a href="loginapoiador.php">Nos apoie!</a></li>
@@ -74,7 +94,12 @@ include_once '../php/loginapoiador.php';
         </button>
       </form>
     </div>
-          
+
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+      <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+    </div>
+
 
   </nav>
 
@@ -169,4 +194,5 @@ include_once '../php/loginapoiador.php';
   </footer>
 </body>
 <script src="../js/index.js?v=1"></script>
+
 </html>

@@ -29,54 +29,102 @@ $result_img = $conn->query($sql_img);
 $imagem = null;
 
 if ($result_img && $result_img->num_rows > 0) {
-    $imagem = $result_img->fetch_assoc(); // pega só a primeira linha
+  $imagem = $result_img->fetch_assoc(); // pega só a primeira linha
 }
+
+
+include_once '../php/loginapoiador.php';
+
+
+if (!isset($_SESSION['apoiador_id'])) {
+
+  $nome = "";
+
+} else {
+  
+  $id = $_SESSION['apoiador_id'];
+
+
+  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
+
+  $nome = "";
+  $imagem = "";
+  if ($result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
+}
+
 
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Botan Mind</title>
   <link rel="stylesheet" href="../css/style.css?v=1" />
-    <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
+  <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
 
 </head>
+
 <body>
 
-<nav id="menu">
+  <nav id="menu">
     <ul class="menu-list">
       <li><a href="index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
-      <li><a href="cadastro.php">Cadastro de plantas</a></li>
+      <?php if (!isset($_SESSION['apoiador_id'])): ?>
+      <?php else: ?>
+        <li><a href="cadastro.php">Cadastro de plantas</a></li>
+      <?php endif; ?>
       <li><a href="ListaPlantas.php" class="active">Lista de plantas</a></li>
       <li><a href="loginapoiador.php">Nos apoie!</a></li>
     </ul>
-</nav>
+    
+    <div class="search-container">
+      <form action="/search" method="get" class="search-form">
+        <input type="text" name="q" class="search-input" placeholder="Pesquisar por plantas">
+        <button type="submit" class="search-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+      <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+      <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+    </div>
+  </nav>
 
   <main class="listar-container">
     <h2 class="titulo-listar" style="margin-top: 100px;">Plantas</h2>
-      <div class="listar-grid">
-        <?php if (count($plantas) > 0): ?>
-          <?php foreach ($plantas as $planta): ?>
-            <a href="template_page.php?id=<?= htmlspecialchars($planta['id']) ?>" class="listar-card">
-              <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="listar-card-img">
-              <div class="listar-card-content">
-                <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
-                <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
-                <span class="read-more-btn">Leia Mais</span>
-              </div>
-            </a>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <p>Nenhuma planta encontrada.</p>
-        <?php endif; ?>
-      </div>  
+    <div class="listar-grid">
+      <?php if (count($plantas) > 0): ?>
+        <?php foreach ($plantas as $planta): ?>
+          <a href="template_page.php?id=<?= htmlspecialchars($planta['id']) ?>" class="listar-card">
+            <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="listar-card-img">
+            <div class="listar-card-content">
+              <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
+              <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
+              <span class="read-more-btn">Leia Mais</span>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>Nenhuma planta encontrada.</p>
+      <?php endif; ?>
+    </div>
   </main>
 
-<footer class="footer">
+  <footer class="footer">
     <div class="rodape">
       <div class="logo">
         <img src="../assets/img/logo.png" class="logo-img" alt="">
@@ -136,4 +184,5 @@ if ($result_img && $result_img->num_rows > 0) {
 
   </footer>
 </body>
+
 </html>
