@@ -16,7 +16,6 @@
       <li><a href="./index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
       <li><a href="./ListaPlantas.php">Lista de plantas</a></li>
-      <li><a href="./loginapoiador.php" class="active">Nos apoie!</a></li>
     </ul>
     <div class="search-container">
       <form action="/search" method="get" class="search-form">

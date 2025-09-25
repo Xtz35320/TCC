@@ -313,7 +313,6 @@ $id = $_SESSION['apoiador_id'];
       <li><a href="#about">Sobre</a></li>
       <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
-      <li><a href="loginapoiador.php">Nos apoie!</a></li>
     </ul>
     <div class="search-container">
       <form class="search-form">
@@ -328,10 +327,13 @@ $id = $_SESSION['apoiador_id'];
       </form>
     </div>
 
-    <div style="display:flex; align-items:center; gap:10px;">
-      <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-      <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
-    </div>
+    <?php if (!isset($_SESSION['apoiador_id'])): ?>
+    <?php else: ?>
+      <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
+        <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+        <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+      </a>
+    <?php endif; ?>
 
   </nav>
 

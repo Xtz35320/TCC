@@ -14,7 +14,6 @@
       <li><a href="./index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
       <li><a href="./ListaPlantas.php">Lista de plantas</a></li>
-      <li><a href="./loginapoiador.php" class="active">Nos apoie!</a></li>
     </ul>
     <div class="search-container">
       <form action="/search" method="get" class="search-form"> <input type="text" name="q" class="search-input" placeholder="Pesquisar por plantas"> <button type="submit" class="search-button"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
