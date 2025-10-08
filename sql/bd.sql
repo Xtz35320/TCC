@@ -3,7 +3,13 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
+DROP TABLE IF EXISTS `aplicacoes_biotec`;;
+DROP TABLE IF EXISTS `apoiador`;;
+DROP TABLE IF EXISTS `caracteristicas`;;
+DROP TABLE IF EXISTS `distribuicao_geografica`;;
+DROP TABLE IF EXISTS `documentos`;;
+DROP TABLE IF EXISTS `imagens`;;
+DROP TABLE IF EXISTS `planta`;;
 
 
 CREATE TABLE `aplicacoes_biotec` (
