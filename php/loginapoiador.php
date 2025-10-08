@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['apoiador_nome'] = $apoiador['nome'];
                 $_SESSION['apoiador'] = true;
 
-                echo "<script>alert('Login realizado com sucesso!'); window.location.href='../page/index.php';</script>";
+                echo "<script>window.location.href='../page/index.php';</script>";
                 exit;
             } else {
                 echo "<script>alert('E-mail ou senha incorreta.'); window.location.href='../page/loginapoiador.php';</script>";

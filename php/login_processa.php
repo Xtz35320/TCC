@@ -28,4 +28,6 @@ if ($usuario_db && password_verify($senha_digitada, $usuario_db['senha'])) {
     echo "<script>alert('Usuário ou senha inválidos.');</script>";
     echo "<script>window.location.href='../page/loginapoiador.php';</script>"; // Retorna para o login
 }
+
+
 ?>

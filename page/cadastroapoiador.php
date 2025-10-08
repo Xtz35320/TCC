@@ -56,6 +56,7 @@
         // Criptografa a senha
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
+
         $sql = "INSERT INTO apoiador (nome, email, cpf, emprego, imagem, senha) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssss", $nome, $email, $cpf, $emprego, $imagem, $senhaHash);
@@ -74,7 +75,7 @@
       <form class="form-login" action="" method="POST" enctype="multipart/form-data">
         <label>Nome: <input type="text" name="nome" required></label><br>
         <label>Email: <input type="email" name="email" required></label><br>
-        <label>CPF: <input type="text" name="cpf" required></label><br>
+        <label>CPF: <input type="text" name="cpf" required  maxlength="11"></label><br>
         <label>Emprego: <input type="text" name="emprego"></label><br>
         <label>Senha: <input type="password" name="senha" required></label><br>
         <label>Imagem (opcional): <input type="file" name="imagem" accept="image/*"></label><br>

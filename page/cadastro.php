@@ -268,7 +268,7 @@ $id = $_SESSION['apoiador_id'];
 
 
     /* Tooltip para mostrar o nome do estado */
-    .tooltip {
+    .tooltip.active {
       pointer-events: none;
       position: absolute;
       font-size: 18px;
@@ -284,10 +284,6 @@ $id = $_SESSION['apoiador_id'];
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-    }
-
-    .tooltip.active {
-      display: block;
     }
 
     .tooltip:after {

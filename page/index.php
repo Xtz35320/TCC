@@ -66,7 +66,7 @@ if (!isset($_SESSION['apoiador_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Botan Mind</title>
-  <link rel="stylesheet" href="../css/style.css?v=1" />
+  <link rel="stylesheet" href="../css/style.css" />
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
 </head>
 
@@ -112,7 +112,7 @@ if (!isset($_SESSION['apoiador_id'])) {
 
 
   <header class="hero-section">
-    <div class="hero-overlay"></div>
+    <div class="hero-overlay"><img src="../assets/img/floresta.jpg" alt=""></div>
     <div class="hero-content">
       <h1 class="titulo-index">Bem-vindo ao Botan Mind</h1>
       <p class="subtitulo-index">Seu guia completo para o mundo da botânica.</p>
@@ -140,7 +140,7 @@ if (!isset($_SESSION['apoiador_id'])) {
     </div>
   </main>
 
-    <div style="width:100%; background: #ff7b00ff; padding:40px 20px; text-align:center;">
+    <div style="width:100%; background: #196901ff; padding:40px 20px; text-align:center;">
     <h2>Ajude a manter o Botan Mind vivo!</h2>
     <p>Nosso site é feito com dedicação para compartilhar conhecimento sobre o mundo das plantas. 
     Seu apoio é fundamental para continuarmos crescendo.</p>
@@ -209,6 +209,6 @@ if (!isset($_SESSION['apoiador_id'])) {
 
   </footer>
 </body>
-<script src="../js/index.js?v=1"></script>
+<script src="../js/index.js"></script>
 
 </html>
