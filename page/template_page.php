@@ -102,6 +102,8 @@ if (!isset($_SESSION['apoiador_id'])) {
   }
 }
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +113,7 @@ if (!isset($_SESSION['apoiador_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Botan Mind</title>
-  <link rel="stylesheet" href="../css/style.css?v=1" />
+  <link rel="stylesheet" href="../css/style.css?v=2" />
   <link rel="stylesheet" href="../css/mapa.css?v=1">
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
 
@@ -142,7 +144,7 @@ if (!isset($_SESSION['apoiador_id'])) {
     </ul>
     <?php if (!isset($_SESSION['apoiador_id'])): ?>
     <?php else: ?>
-      <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
+      <a href="./perfil.php" style="display:flex; align-items:center; gap:10px; ">
         <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
         <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
       </a>
@@ -335,6 +337,17 @@ if (!isset($_SESSION['apoiador_id'])) {
         <h3 class="texto"><?php echo htmlspecialchars($cuidados) ?> </h3>
         </h3>
       </div>
+
+      <div class="card">
+        <a style="display:flex; align-items:center; gap:10px;">
+          <img src="<?php echo htmlspecialchars($imagem_criador) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+          <h5 style="margin:0;"><?php echo htmlspecialchars($nome_criador) ?></h5>
+        </a>
+        <a href="./avaliacao.php">
+          <button class="btn_cadastro" >Avalie a planta</button>
+        </a>
+      </div>
+      
     </div>
 
     <div class="parte_pdf">
@@ -353,9 +366,7 @@ if (!isset($_SESSION['apoiador_id'])) {
       </div>
     </div>
 
-    <script src="../js/index.js?v=1"></script>
-
-
+  <script src="../js/index.js?v=1"></script>
 
 </body>
 

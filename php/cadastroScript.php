@@ -140,11 +140,13 @@ try {
         $conn->commit();
         
         // Redirecionar com mensagem de sucesso
-        header('Location: cadastro.php?success=1');
+        header('Location: ../page/index.php');
         exit;
         
     } else {
         throw new Exception('Método de requisição inválido.');
+
+
     }
     
 } catch (Exception $e) {

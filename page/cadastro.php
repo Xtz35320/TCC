@@ -336,7 +336,6 @@ $id = $_SESSION['apoiador_id'];
   <!-- Botão de Preenchimento Automático -->
   <div class="btn-container" style="margin-top: 50px;">
     <button type="button" class="btn_cadastro" onclick="preencherFormulario()">Preencher Automaticamente</button>
-    <button class="btn_cadastro" type="submit">Cadastrar Planta</button>
   </div>
 
   <script>

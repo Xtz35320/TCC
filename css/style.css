@@ -58,7 +58,7 @@ body {
 }
 
 
-#svgcolor{
+#svgcolor {
   fill: white;
 }
 
@@ -438,8 +438,6 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 25% 0 25%;
-
 }
 
 .cabeca {
@@ -470,7 +468,7 @@ body {
 }
 
 .hero-overlay {
-  position: absolute;     
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -480,11 +478,12 @@ body {
   overflow: hidden;
 }
 
-.hero-overlay img{
+.hero-overlay img {
   filter: blur(5px) brightness(0.5);
   width: 100%;
   height: 100%;
-  object-fit: cover; /* mantém proporção e corta o excesso */
+  object-fit: cover;
+  /* mantém proporção e corta o excesso */
   display: block;
 }
 
@@ -903,8 +902,58 @@ svg {
   justify-content: center;
 }
 
+/* =========================
+    perfil
+   ========================= */
+
+.perfil-container {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.perfil-card {
+  background-color: #1e1e1e;
+  border-radius: 15px;
+  padding: 40px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+.perfil-foto {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1c7924;
+  margin-bottom: 20px;
+}
+
+.perfil-info h2 {
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.perfil-info p {
+  color: #ccc;
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+.perfil-acoes {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
 .btn_deslogar {
-  background-color: #ad1616;
+  background-color: #f39c12;
   color: white;
   padding: 12px 25px;
   border: none;
@@ -916,11 +965,36 @@ svg {
 }
 
 .btn_deslogar:hover {
+  background-color: #b06e0a;
+}
+
+.btn_delete {
+  background-color: #ad1616;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.btn_delete:hover {
   background-color: #5c0909;
 }
 
+@media (max-width: 600px) {
+  .perfil-card {
+    padding: 25px;
+  }
 
+  .perfil-info p {
+    font-size: 16px;
+  }
 
-
-
-
+  .perfil-foto {
+    width: 120px;
+    height: 120px;
+  }
+}

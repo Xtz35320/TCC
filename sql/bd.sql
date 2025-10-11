@@ -1,3 +1,4 @@
+-- Active: 1754073718833@@127.0.0.1@3306@bd
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -10,6 +11,7 @@ DROP TABLE IF EXISTS `distribuicao_geografica`;;
 DROP TABLE IF EXISTS `documentos`;;
 DROP TABLE IF EXISTS `imagens`;;
 DROP TABLE IF EXISTS `planta`;;
+DROP TABLE IF EXISTS `planta_estado`;;
 
 
 CREATE TABLE `aplicacoes_biotec` (
@@ -79,7 +81,8 @@ CREATE TABLE `planta` (
   `nome_cientifico` varchar(100) DEFAULT NULL,
   `descricao` text,
   `cuidados` text,
-  `video_link` varchar(255) DEFAULT NULL
+  `video_link` varchar(255) DEFAULT NULL,
+  `apoiador_id` INT
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

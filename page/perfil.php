@@ -4,17 +4,12 @@ include_once '../php/loginapoiador.php';
 
 if (isset($_POST['logout'])) {
     unset($_SESSION['apoiador_id']);
-
     header("Location: index.php");
     exit;
 }
 
 if (!isset($_SESSION['apoiador_id'])) {
-    $nome = "";
-    $imagem = "";
-    $cpf = "";
-    $emprego = "";
-    $email = "";
+    $nome = $imagem = $cpf = $emprego = $email = "";
 } else {
     $id = $_SESSION['apoiador_id'];
 
@@ -33,85 +28,56 @@ if (!isset($_SESSION['apoiador_id'])) {
 
     function formatarCPF($cpf)
     {
-        // Remove tudo que não é número
         $cpf = preg_replace('/\D/', '', (string)$cpf);
-
-        // Se não tiver 11 dígitos, retorna string vazia
-        if (strlen($cpf) !== 11) {
-            return '';
-        }
-
-        // Mostra os 3 primeiros e os 2 últimos
+        if (strlen($cpf) !== 11) return '';
         return substr($cpf, 0, 3) . str_repeat('*', 6) . substr($cpf, -2);
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Botan Mind</title>
-    <link rel="stylesheet" href="../css/style.css?v=1" />
-    <link rel="stylesheet" href="../css/mapa.css?v=1">
+    <title>Botan Mind | Perfil</title>
+    <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>" />
     <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
 </head>
 
 <body>
-
-    <div id="pdfModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <iframe id="modalIframe" class="modal-iframe"></iframe>
-        </div>
-    </div>
-
     <nav id="menu">
         <ul class="menu-list">
             <li><a href="index.php">Início</a></li>
             <li><a href="#about">Sobre</a></li>
-            <?php if (!isset($_SESSION['apoiador_id'])): ?>
-            <?php else: ?>
+            <?php if (isset($_SESSION['apoiador_id'])): ?>
                 <li><a href="cadastro.php">Cadastro de plantas</a></li>
             <?php endif; ?>
             <li><a href="ListaPlantas.php">Lista de plantas</a></li>
         </ul>
     </nav>
 
-    <div class="cabeca"></div>
-
-    <div class="planta-e-pdf">
-        <div class="informacoes-planta">
-
-            <div class="card_perfil">
-                <div class="bloco">
-                    <div class="imagens" id="imagens">
-                        <img src="<?php echo htmlspecialchars($imagem); ?>" alt="<?php echo htmlspecialchars($nome); ?>" />
-                    </div>
-                </div>
-                <h1 class="titulo"><?php echo htmlspecialchars($nome) ?></h1>
+    <section class="perfil-container">
+        <div class="perfil-card">
+            <img src="<?php echo htmlspecialchars($imagem ?: '../img/default-user.png'); ?>" alt="Foto de perfil" class="perfil-foto">
+            <div class="perfil-info">
+                <h2><?php echo htmlspecialchars($nome ?: 'Usuário não identificado'); ?></h2>
+                <p><strong>CPF:</strong> <?php echo htmlspecialchars(formatarCPF($cpf)); ?></p>
+                <p><strong>Emprego:</strong> <?php echo htmlspecialchars($emprego); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
             </div>
 
-            <div class="card">
-                <div class="info_planta">
-                    <h1 class="titulo">Informações</h1>
-                    <h3 class="texto">CPF: <?php echo htmlspecialchars(formatarCPF($cpf)) ?></h3>
-                    <h3 class="texto">Emprego: <?php echo htmlspecialchars($emprego) ?></h3>
-                    <h3 class="texto">Email: <?php echo htmlspecialchars($email) ?></h3>
-                </div>
-            </div>
-
-            <div class="card">
+            <div class="perfil-acoes">
                 <form method="post">
-                    <button class="btn_deslogar" type="submit" name="logout">Deslogar</button>
+                    <button class="btn_deslogar" type="submit" name="logout">Sair</button>
+                </form>
+                <form method="post">
+                    <button class="btn_delete" type="submit" name="delete">Excluir</button>
                 </form>
             </div>
-
-            <script src="../js/index.js?v=1"></script>
         </div>
-    </div>
-</body>
+    </section>
 
+    <script src="../js/index.js?v=1"></script>
+</body>
 </html>
