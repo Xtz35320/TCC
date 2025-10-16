@@ -87,10 +87,10 @@ if (!isset($_SESSION['apoiador_id'])) {
   $nome = "";
 } else {
 
-  $id = $_SESSION['apoiador_id'];
+  $apoiador_id = $_SESSION['apoiador_id'];
 
 
-  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $apoiador_id";
   $result_apoiador = $conn->query($sql_apoiador);
 
   $nome = "";
@@ -137,6 +137,10 @@ if (!isset($_SESSION['apoiador_id'])) {
         <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <?php endif; ?>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+      <?php if (!isset($_SESSION['apoiador_id'])): ?>
+      <?php else: ?>
+        <li><a href="avaliacao.php">Avalie aqui!</a></li>
+      <?php endif; ?>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
         <li><a href="loginapoiador.php">Nos apoie!</a></li>
       <?php else: ?>
@@ -338,16 +342,54 @@ if (!isset($_SESSION['apoiador_id'])) {
         </h3>
       </div>
 
+
+      <!-- Avaliações da planta -->
       <div class="card">
-        <a style="display:flex; align-items:center; gap:10px;">
-          <img src="<?php echo htmlspecialchars($imagem_criador) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-          <h5 style="margin:0;"><?php echo htmlspecialchars($nome_criador) ?></h5>
-        </a>
-        <a href="./avaliacao.php">
-          <button class="btn_cadastro" >Avalie a planta</button>
-        </a>
+        <h1 class="titulo">Avaliações sobre <?php echo htmlspecialchars($nome_popular); ?></h1>
+
+        <?php
+        // Busca as avaliações dessa planta
+        $sql_avaliacoes = "
+            SELECT a.descricao, ap.nome, ap.imagem 
+            FROM avaliacao a
+            JOIN apoiador ap ON ap.id = a.apoiador_id
+            WHERE a.planta_id = $id
+            ORDER BY a.id DESC
+          ";
+
+        $result_avaliacoes = $conn->query($sql_avaliacoes);
+
+        if ($result_avaliacoes && $result_avaliacoes->num_rows > 0):
+          while ($av = $result_avaliacoes->fetch_assoc()):
+        ?>
+            <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:15px; background-color:#161616; border-radius:10px; padding:10px;">
+              <img src="<?php echo htmlspecialchars($av['imagem']); ?>"
+                style="width:50px; height:50px; object-fit:cover; border-radius:50%;">
+              <div>
+                <strong style="color:#1c7924;"><?php echo htmlspecialchars($av['nome']); ?>:</strong><br>
+                <span style="color:#ddd;"><?php echo htmlspecialchars($av['descricao']); ?></span>
+              </div>
+            </div>
+        <?php
+          endwhile;
+        else:
+          echo "<p style='color:#aaa;'>Nenhuma avaliação ainda. Seja o primeiro a comentar!</p>";
+        endif;
+        ?>
+
+        <?php if (isset($_SESSION['apoiador_id'])): ?>
+          <form method="POST" action="../php/salvar_avaliacao.php" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+            <input type="hidden" name="planta_id" value="<?php echo (int)$id; ?>">
+            <textarea name="comentario" placeholder="Deixe seu comentário..."
+              style="background-color:#111; color:#fff; border:none; padding:10px; border-radius:8px;" required></textarea>
+            <button type="submit" style="background-color:#1c7924; color:#fff; border:none; padding:10px; border-radius:8px; cursor:pointer;">
+              Enviar Avaliação
+            </button>
+          </form>
+        <?php else: ?>
+          <p style="margin-top:10px;">💬 <a href="loginapoiador.php" style="color:#1c7924;">Faça login como apoiador</a> para deixar sua avaliação.</p>
+        <?php endif; ?>
       </div>
-      
     </div>
 
     <div class="parte_pdf">
@@ -366,7 +408,7 @@ if (!isset($_SESSION['apoiador_id'])) {
       </div>
     </div>
 
-  <script src="../js/index.js?v=1"></script>
+    <script src="../js/index.js?v=1"></script>
 
 </body>
 

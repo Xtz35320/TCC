@@ -82,6 +82,10 @@ if (!isset($_SESSION['apoiador_id'])) {
         <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <?php endif; ?>
       <li><a href="ListaPlantas.php" class="active">Lista de plantas</a></li>
+            <?php if (!isset($_SESSION['apoiador_id'])): ?>
+      <?php else: ?>
+        <li><a href="avaliacao.php">Avalie aqui!</a></li>
+      <?php endif; ?>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
         <li><a href="loginapoiador.php">Nos apoie!</a></li>
       <?php else: ?>

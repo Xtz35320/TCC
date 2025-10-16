@@ -4,16 +4,16 @@ include_once '../php/loginapoiador.php';
 
 $id = $_SESSION['apoiador_id'];
 
-  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
-  $result_apoiador = $conn->query($sql_apoiador);
+$sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+$result_apoiador = $conn->query($sql_apoiador);
 
-  $nome = "";
-  $imagem = "";
-  if ($result_apoiador->num_rows > 0) {
-    $row = $result_apoiador->fetch_assoc();
-    $nome = $row['nome'];
-    $imagem = $row['imagem'];
-  }
+$nome = "";
+$imagem = "";
+if ($result_apoiador->num_rows > 0) {
+  $row = $result_apoiador->fetch_assoc();
+  $nome = $row['nome'];
+  $imagem = $row['imagem'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -309,6 +309,10 @@ $id = $_SESSION['apoiador_id'];
       <li><a href="#about">Sobre</a></li>
       <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+      <?php if (!isset($_SESSION['apoiador_id'])): ?>
+        <?php else: ?>
+          <li><a href="avaliacao.php">Avalie aqui!</a></li>
+      <?php endif; ?>
     </ul>
     <div class="search-container">
       <form class="search-form">

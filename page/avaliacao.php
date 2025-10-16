@@ -23,19 +23,20 @@ $plantas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 // Dados do apoiador logado
 $nome = $imagem = "";
 if (isset($_SESSION['apoiador_id'])) {
-    $id = $_SESSION['apoiador_id'];
-    $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
-    $result_apoiador = $conn->query($sql_apoiador);
-    if ($result_apoiador && $result_apoiador->num_rows > 0) {
-        $row = $result_apoiador->fetch_assoc();
-        $nome = $row['nome'];
-        $imagem = $row['imagem'];
-    }
+  $id = $_SESSION['apoiador_id'];
+  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
+  if ($result_apoiador && $result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,7 +69,7 @@ if (isset($_SESSION['apoiador_id'])) {
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
       transition: transform 0.2s ease;
     }
 
@@ -171,6 +172,7 @@ if (isset($_SESSION['apoiador_id'])) {
   <main class="avaliacao-container">
     <h2 class="titulo-avaliacao">Plantas Recentes</h2>
 
+
     <div class="plantas-grid">
       <?php foreach ($plantas as $planta): ?>
         <div class="planta-card">
@@ -182,13 +184,15 @@ if (isset($_SESSION['apoiador_id'])) {
             <button class="btn-avaliar" onclick="toggleForm(this)">Avaliar</button>
 
             <form class="avaliacao-form" method="post" action="../php/salvar_avaliacao.php">
-              <input type="hidden" name="planta_id" value="<?php echo $planta['id']; ?>">
-              <textarea name="comentario" placeholder="Escreva sua avaliação..."></textarea>
+              <input type="hidden" name="planta_id" value="<?php echo htmlspecialchars($planta['id']); ?>">
+
+              <textarea name="comentario" id="comentario" placeholder="Escreva sua avaliação..."></textarea>
               <button type="submit" class="btn-avaliar">Enviar</button>
             </form>
           </div>
         </div>
       <?php endforeach; ?>
+      
     </div>
   </main>
 
@@ -198,10 +202,18 @@ if (isset($_SESSION['apoiador_id'])) {
         <img src="../assets/img/logo.png" class="logo-img" alt="Botan Mind">
       </div>
       <div class="paginas-rodape">
-        <a href="./index.php"><h5>Início</h5></a>
-        <a href="ListaPlantas.php"><h5>Lista de plantas</h5></a>
-        <a href="sobre.php"><h5>Sobre</h5></a>
-        <a href="contato.php"><h5>Contato</h5></a>
+        <a href="./index.php">
+          <h5>Início</h5>
+        </a>
+        <a href="ListaPlantas.php">
+          <h5>Lista de plantas</h5>
+        </a>
+        <a href="sobre.php">
+          <h5>Sobre</h5>
+        </a>
+        <a href="contato.php">
+          <h5>Contato</h5>
+        </a>
       </div>
       <div class="redes-sociais">
         <a href="https://www.instagram.com/botanmind9">Instagram</a>
@@ -217,5 +229,9 @@ if (isset($_SESSION['apoiador_id'])) {
       form.style.display = form.style.display === 'flex' ? 'none' : 'flex';
     }
   </script>
+
+
+
 </body>
+
 </html>
