@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 6.0.0-dev+20250718.d42db65a1e
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Tempo de geração: 16/10/2025 às 17:27
--- Versão do servidor: 8.0.30
--- Versão do PHP: 8.3.4
+-- Generation Time: Oct 17, 2025 at 12:14 AM
+-- Server version: 8.4.3
+-- PHP Version: 8.3.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `bd`
+-- Database: `bd`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `aplicacoes_biotec`
+-- Table structure for table `aplicacoes_biotec`
 --
 
 CREATE TABLE `aplicacoes_biotec` (
@@ -34,7 +34,7 @@ CREATE TABLE `aplicacoes_biotec` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `aplicacoes_biotec`
+-- Dumping data for table `aplicacoes_biotec`
 --
 
 INSERT INTO `aplicacoes_biotec` (`id`, `planta_id`, `texto`) VALUES
@@ -49,7 +49,7 @@ INSERT INTO `aplicacoes_biotec` (`id`, `planta_id`, `texto`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `apoiador`
+-- Table structure for table `apoiador`
 --
 
 CREATE TABLE `apoiador` (
@@ -63,18 +63,18 @@ CREATE TABLE `apoiador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `apoiador`
+-- Dumping data for table `apoiador`
 --
 
 INSERT INTO `apoiador` (`id`, `nome`, `email`, `cpf`, `emprego`, `imagem`, `senha`) VALUES
 (8, 'Pedro Otavio', 'Pedro.otavio@gmail.com', '12312312310', 'Botanico', 'uploads/68ed26f35419b_2pac.jpg', '$2y$10$3wB4Stv9Y0yL.fLk4EdclOV71ivDxnLi8w4Su8koROBEmHei0zuo6'),
-(9, 'Leonardo', 'leo.muniz@gmail.com', '12145678952', 'admin', 'uploads/68f11f944de7b_eminem.jpg', '$2y$10$LeJjICS9hOSvHNgrwcsZSu4/.m0rKiRTbD9ou9A8v3ZZvrEAeil8C'),
+(9, 'Leonardo', 'leomunizetec@gmail.com', '12145678952', 'admin', 'uploads/68f11f944de7b_eminem.jpg', '$2y$10$LeJjICS9hOSvHNgrwcsZSu4/.m0rKiRTbD9ou9A8v3ZZvrEAeil8C'),
 (10, 'Miguel', 'miguelnas190@gmail.com', '11111111111', 'admin', 'uploads/68f122815189a_snoop_dogg_photo_by_estevan_oriol_archive_photos_getty_455616412.jpg', '$2y$10$Il9PfNhpxOOpsrTtCicLKethKUlXZw73KnWArQt9iH2/eQtnB7.He');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `avaliacao`
+-- Table structure for table `avaliacao`
 --
 
 CREATE TABLE `avaliacao` (
@@ -87,7 +87,7 @@ CREATE TABLE `avaliacao` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `caracteristicas`
+-- Table structure for table `caracteristicas`
 --
 
 CREATE TABLE `caracteristicas` (
@@ -103,7 +103,7 @@ CREATE TABLE `caracteristicas` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `caracteristicas`
+-- Dumping data for table `caracteristicas`
 --
 
 INSERT INTO `caracteristicas` (`id`, `planta_id`, `reino`, `divisao`, `classe`, `ordem`, `familia`, `genero`, `especie`) VALUES
@@ -121,7 +121,7 @@ INSERT INTO `caracteristicas` (`id`, `planta_id`, `reino`, `divisao`, `classe`, 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `distribuicao_geografica`
+-- Table structure for table `distribuicao_geografica`
 --
 
 CREATE TABLE `distribuicao_geografica` (
@@ -131,7 +131,7 @@ CREATE TABLE `distribuicao_geografica` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `distribuicao_geografica`
+-- Dumping data for table `distribuicao_geografica`
 --
 
 INSERT INTO `distribuicao_geografica` (`id`, `regiao`, `estado`) VALUES
@@ -166,7 +166,7 @@ INSERT INTO `distribuicao_geografica` (`id`, `regiao`, `estado`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `documentos`
+-- Table structure for table `documentos`
 --
 
 CREATE TABLE `documentos` (
@@ -178,7 +178,7 @@ CREATE TABLE `documentos` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `documentos`
+-- Dumping data for table `documentos`
 --
 
 INSERT INTO `documentos` (`id`, `planta_id`, `tipo`, `titulo`, `link_pdf`) VALUES
@@ -189,7 +189,7 @@ INSERT INTO `documentos` (`id`, `planta_id`, `tipo`, `titulo`, `link_pdf`) VALUE
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `imagens`
+-- Table structure for table `imagens`
 --
 
 CREATE TABLE `imagens` (
@@ -200,7 +200,7 @@ CREATE TABLE `imagens` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `imagens`
+-- Dumping data for table `imagens`
 --
 
 INSERT INTO `imagens` (`id`, `planta_id`, `caminho_imagem`, `descricao`) VALUES
@@ -224,7 +224,7 @@ INSERT INTO `imagens` (`id`, `planta_id`, `caminho_imagem`, `descricao`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `planta`
+-- Table structure for table `planta`
 --
 
 CREATE TABLE `planta` (
@@ -238,7 +238,7 @@ CREATE TABLE `planta` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `planta`
+-- Dumping data for table `planta`
 --
 
 INSERT INTO `planta` (`id`, `nome_popular`, `nome_cientifico`, `descricao`, `cuidados`, `video_link`, `apoiador_id`) VALUES
@@ -247,16 +247,16 @@ INSERT INTO `planta` (`id`, `nome_popular`, `nome_cientifico`, `descricao`, `cui
 (23, 'Samambaia', 'Tracheophyta', 'As samambaias, ou fetos, são vegetais vasculares membros do táxon das pteridófitas (que deixou de ter validade taxonômica e só é utilizado como uma denominação informal). Elas possuem tecidos vasculares (xilema e floema), folhas verdadeiras, se reproduzem através de esporos e não produzem sementes ou flores.', 'Para cuidar bem de uma samambaia, forneça luz indireta abundante, mantenha o solo constantemente úmido, mas nunca encharcado, borrifando água nas folhas para aumentar a umidade do ar. Realize adubações regulares com fertilizantes orgânicos, como húmus de minhoca, e faça a poda de folhas secas ou danificadas. ', 'https://www.youtube.com/embed/45j_-Sxp3gM?si=WVQ7VabU5I5aIZCq', NULL),
 (22, 'Açaizeiro', 'Euterpe oleracea', 'O açaí é uma palmeira muito comum na região da Amazônia que produz um fruto bacáceo de cor roxa (a parede do órgão ovário amadurece e forma a camada externa comestível), muito utilizado na confecção de alimentos e bebidas. A palmeira do açaí é por vezes confundida, no estado do Pará, com a palmeira juçara, que embora seja outro tipo de palmeira, dá palmito de excelente qualidade.', 'Para cuidar de um açaizeiro, mantenha o solo constantemente úmido, mas sem encharcar, e adube-o com matéria orgânica para garantir os nutrientes necessários. Realize podas regulares para remover folhas velhas ou doentes, ajudando a palmeira a crescer saudável. Monitore a planta em busca de pragas e doenças, adotando medidas de controle quando necessário. É importante também que o local tenha sol pleno e alta umidade.', 'https://www.youtube.com/embed/zylP9UUg5QQ?si=U5k9QdCRGuDfsKdj', NULL),
 (25, 'Bananeira', 'Musa', 'As bananeiras, figueiras-de-adão, pacobeiras ou pacoveiras são plantas do gênero Musa, um dos três que compõem a família Musaceae, que inclui as plantas herbáceas vivazes, incluindo as bananeiras cultivadas para a produção de fibras (abacás) e para a produção de bananas.', 'Assim como qualquer planta, frutífera ou não, o sucesso depende de como você faz o cultivo. A bananeira adora ambientes úmidos, mas sem excessos. O ideal é uma taxa de 50% de umidade para que ela se mantenha saudável.\r\n\r\nIsso é essencial para ela crescer bem. Por essa razão, quando é cultivada em ambientes com temperaturas mais amenas, a bananeira deve ser colocada em um local onde possa receber luz solar para crescer e dar frutos.\r\n\r\nAlém disso, analisar as folhas da planta faz parte de como cuidar de bananeira em vaso ou em jardim. Se a tonalidade for amarelada, é sinal de que faltam nutrientes. Então, é hora de caprichar na adubação com nitrogênio na etapa do desenvolvimento e em um fertilizante 15:5:30 regularmente na fase adulta. Para a manutenção, confira outros detalhes!\r\n\r\nElimine infestantes para aumentar o vigor da bananeira e evitar pragas;\r\nRegue a planta com frequência, evitando que o solo fique com aparência seca;\r\nRemova folhas velhas para evitar atrito e danos no cacho de bananas;\r\nUse restos da planta para adubar o solo em volta, mas não diretamente abaixo do tronco.\r\nO último ponto de atenção ocorre em uma fase já mais avançada, na época dos frutos. Após cortar o cacho, é preciso podar o tronco da bananeira à meia-altura. Isso faz com que a planta-filha retire nutrientes do restante do tronco da planta-mãe. Só depois, é possível removê-la totalmente.', 'https://www.youtube.com/embed/45j_-Sxp3gM?si=WVQ7VabU5I5aIZCq', NULL),
-(26, 'Ipê-Amarelo', 'Handroanthus albus', 'Árvore nativa do Brasil, muito conhecida por suas flores amarelas intensas e beleza ornamental. É símbolo da resistência e da força da natureza.', 'Prefere sol pleno e solos bem drenados. Regar moderadamente e podar após a floração.', NULL, NULL),
-(27, 'Vitória-Régia', 'Victoria amazonica', 'Planta aquática de grande porte, típica da região amazônica, famosa por suas folhas gigantes e flores que abrem à noite.', 'Necessita de lagoas com água quente e tranquila, rica em nutrientes. Não tolera frio intenso.', NULL, NULL),
-(28, 'Cacto-Mandacaru', 'Cereus jamacaru', 'Cacto típico do semiárido brasileiro, resistente à seca, com flores brancas grandes que florescem à noite.', 'Evitar excesso de água e manter em local ensolarado. Pode ser cultivado em solos arenosos e secos.', NULL, NULL),
-(29, 'Araucária', 'Araucaria angustifolia', 'Árvore símbolo do sul do Brasil, também conhecida como pinheiro-do-paraná. Produz sementes comestíveis chamadas pinhões.', 'Prefere climas frios e solos ácidos. Requer espaçamento amplo para se desenvolver adequadamente.', NULL, NULL),
-(30, 'Jatobá', 'Hymenaea courbaril', 'Árvore de grande porte da Mata Atlântica e Amazônia. Possui madeira resistente e frutos utilizados na alimentação e medicina tradicional.', 'Necessita de solo fértil e boa luminosidade. Suporta períodos secos, mas cresce melhor em clima úmido.', NULL, NULL);
+(26, 'Ipê-Amarelo', 'Handroanthus albus', 'Árvore nativa do Brasil, muito conhecida por suas flores amarelas intensas e beleza ornamental. É símbolo da resistência e da força da natureza.', 'Prefere sol pleno e solos bem drenados. Regar moderadamente e podar após a floração.', 'https://www.youtube.com/embed/aM-SZPxcjJE?si=NnoZ2SHX9fIWivj7', NULL),
+(27, 'Vitória-Régia', 'Victoria amazonica', 'Planta aquática de grande porte, típica da região amazônica, famosa por suas folhas gigantes e flores que abrem à noite.', 'Necessita de lagoas com água quente e tranquila, rica em nutrientes. Não tolera frio intenso.', 'https://www.youtube.com/embed/5KIcFR2RPJc?si=kXpuXv2hsDc1iGCX', NULL),
+(28, 'Cacto-Mandacaru', 'Cereus jamacaru', 'Cacto típico do semiárido brasileiro, resistente à seca, com flores brancas grandes que florescem à noite.', 'Evitar excesso de água e manter em local ensolarado. Pode ser cultivado em solos arenosos e secos.', 'https://www.youtube.com/embed/QKLcgZvKtes?si=hl1ZkypTKX0hqwxv', NULL),
+(29, 'Araucária', 'Araucaria angustifolia', 'Árvore símbolo do sul do Brasil, também conhecida como pinheiro-do-paraná. Produz sementes comestíveis chamadas pinhões.', 'Prefere climas frios e solos ácidos. Requer espaçamento amplo para se desenvolver adequadamente.', 'https://www.youtube.com/embed/V5NN7rOf40M?si=UWhJrFfJS-DUGeaX', NULL),
+(30, 'Jatobá', 'Hymenaea courbaril', 'Árvore de grande porte da Mata Atlântica e Amazônia. Possui madeira resistente e frutos utilizados na alimentação e medicina tradicional.', 'Necessita de solo fértil e boa luminosidade. Suporta períodos secos, mas cresce melhor em clima úmido.', 'https://www.youtube.com/embed/YdggLryynO4?si=Fgtpe_maDyjyT8hl', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `planta_estado`
+-- Table structure for table `planta_estado`
 --
 
 CREATE TABLE `planta_estado` (
@@ -265,7 +265,7 @@ CREATE TABLE `planta_estado` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Despejando dados para a tabela `planta_estado`
+-- Dumping data for table `planta_estado`
 --
 
 INSERT INTO `planta_estado` (`id_planta`, `id_estado`) VALUES
@@ -414,24 +414,24 @@ INSERT INTO `planta_estado` (`id_planta`, `id_estado`) VALUES
 (30, 26);
 
 --
--- Índices para tabelas despejadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices de tabela `aplicacoes_biotec`
+-- Indexes for table `aplicacoes_biotec`
 --
 ALTER TABLE `aplicacoes_biotec`
   ADD PRIMARY KEY (`id`),
   ADD KEY `planta_id` (`planta_id`);
 
 --
--- Índices de tabela `apoiador`
+-- Indexes for table `apoiador`
 --
 ALTER TABLE `apoiador`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `avaliacao`
+-- Indexes for table `avaliacao`
 --
 ALTER TABLE `avaliacao`
   ADD PRIMARY KEY (`id`),
@@ -439,40 +439,40 @@ ALTER TABLE `avaliacao`
   ADD KEY `planta_id` (`planta_id`);
 
 --
--- Índices de tabela `caracteristicas`
+-- Indexes for table `caracteristicas`
 --
 ALTER TABLE `caracteristicas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `planta_id` (`planta_id`);
 
 --
--- Índices de tabela `distribuicao_geografica`
+-- Indexes for table `distribuicao_geografica`
 --
 ALTER TABLE `distribuicao_geografica`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `documentos`
+-- Indexes for table `documentos`
 --
 ALTER TABLE `documentos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `planta_id` (`planta_id`);
 
 --
--- Índices de tabela `imagens`
+-- Indexes for table `imagens`
 --
 ALTER TABLE `imagens`
   ADD PRIMARY KEY (`id`),
   ADD KEY `planta_id` (`planta_id`);
 
 --
--- Índices de tabela `planta`
+-- Indexes for table `planta`
 --
 ALTER TABLE `planta`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `planta_estado`
+-- Indexes for table `planta_estado`
 --
 ALTER TABLE `planta_estado`
   ADD PRIMARY KEY (`id_planta`,`id_estado`),
@@ -480,53 +480,53 @@ ALTER TABLE `planta_estado`
   ADD KEY `id_estado` (`id_estado`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `aplicacoes_biotec`
+-- AUTO_INCREMENT for table `aplicacoes_biotec`
 --
 ALTER TABLE `aplicacoes_biotec`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT de tabela `apoiador`
+-- AUTO_INCREMENT for table `apoiador`
 --
 ALTER TABLE `apoiador`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de tabela `avaliacao`
+-- AUTO_INCREMENT for table `avaliacao`
 --
 ALTER TABLE `avaliacao`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT de tabela `caracteristicas`
+-- AUTO_INCREMENT for table `caracteristicas`
 --
 ALTER TABLE `caracteristicas`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
--- AUTO_INCREMENT de tabela `distribuicao_geografica`
+-- AUTO_INCREMENT for table `distribuicao_geografica`
 --
 ALTER TABLE `distribuicao_geografica`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT de tabela `documentos`
+-- AUTO_INCREMENT for table `documentos`
 --
 ALTER TABLE `documentos`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de tabela `imagens`
+-- AUTO_INCREMENT for table `imagens`
 --
 ALTER TABLE `imagens`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
--- AUTO_INCREMENT de tabela `planta`
+-- AUTO_INCREMENT for table `planta`
 --
 ALTER TABLE `planta`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;

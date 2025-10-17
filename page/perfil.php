@@ -9,6 +9,8 @@ if (isset($_POST['logout'])) {
 }
 
 
+
+
 if (!isset($_SESSION['apoiador_id'])) {
     $nome = $imagem = $cpf = $emprego = $email = "";
 } else {
@@ -54,11 +56,10 @@ if (!isset($_SESSION['apoiador_id'])) {
             <?php if (isset($_SESSION['apoiador_id'])): ?>
                 <li><a href="cadastro.php">Cadastro de plantas</a></li>
             <?php endif; ?>
+            <li><a href="ListaPlantas.php">Lista de plantas</a></li>
             <?php if (!isset($_SESSION['apoiador_id'])): ?>
             <?php else: ?>
-                <li><a href="avaliacao.php">Avalie aqui!</a></li>
             <?php endif; ?>
-            <li><a href="ListaPlantas.php">Lista de plantas</a></li>
         </ul>
     </nav>
 
@@ -76,6 +77,9 @@ if (!isset($_SESSION['apoiador_id'])) {
                 <form method="post">
                     <button class="btn_deslogar" type="submit" name="logout">Sair</button>
                 </form>
+                <!-- <form method="post">
+                    <button class="btn_delete" type="submit" name="delete">Excluir</button>
+                </form> -->
             </div>
         </div>
     </section>

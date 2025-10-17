@@ -1,6 +1,15 @@
 <?php
 include_once '../sql/conexao.php';
+include_once '../php/loginapoiador.php';
 
+
+// ======== CONFIGURAÇÃO DE PAGINAÇÃO ======== //
+$plantas_por_pagina = 12;
+$pagina_atual = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($pagina_atual - 1) * $plantas_por_pagina;
+
+
+// ======== CONSULTA PRINCIPAL ======== //
 $sql = "
 SELECT 
     p.id, p.nome_popular, p.nome_cientifico, p.descricao, p.cuidados, p.video_link,
@@ -13,99 +22,59 @@ SELECT
     ) AS caminho_imagem
 FROM planta p
 ORDER BY p.nome_popular ASC
+LIMIT $plantas_por_pagina OFFSET $offset
 ";
-
 $result = $conn->query($sql);
+$plantas = $result && $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
-$plantas = [];
-if ($result && $result->num_rows > 0) {
-  // Pega tudo como array associativo para usar foreach
-  $plantas = $result->fetch_all(MYSQLI_ASSOC);
+
+// ======== TOTAL DE PLANTAS (para calcular páginas) ======== //
+$sql_total = "SELECT COUNT(*) AS total FROM planta";
+$total_result = $conn->query($sql_total);
+$total_plantas = $total_result ? $total_result->fetch_assoc()['total'] : 0;
+$total_paginas = ceil($total_plantas / $plantas_por_pagina);
+
+
+// ======== DADOS DO APOIADOR ======== //
+$nome = $imagem = "";
+if (isset($_SESSION['apoiador_id'])) {
+    $id = $_SESSION['apoiador_id'];
+    $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+    $result_apoiador = $conn->query($sql_apoiador);
+    if ($result_apoiador && $result_apoiador->num_rows > 0) {
+        $row = $result_apoiador->fetch_assoc();
+        $nome = $row['nome'];
+        $imagem = $row['imagem'];
+    }
 }
-
-$sql_img = "SELECT caminho_imagem, descricao FROM imagens LIMIT 1";
-$result_img = $conn->query($sql_img);
-
-$imagem = null;
-
-if ($result_img && $result_img->num_rows > 0) {
-  $imagem = $result_img->fetch_assoc(); // pega só a primeira linha
-}
-
-
-include_once '../php/loginapoiador.php';
-
-
-if (!isset($_SESSION['apoiador_id'])) {
-
-  $nome = "";
-} else {
-
-  $id = $_SESSION['apoiador_id'];
-
-
-  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
-  $result_apoiador = $conn->query($sql_apoiador);
-
-  $nome = "";
-  $imagem = "";
-  if ($result_apoiador->num_rows > 0) {
-    $row = $result_apoiador->fetch_assoc();
-    $nome = $row['nome'];
-    $imagem = $row['imagem'];
-  }
-}
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Botan Mind</title>
-  <link rel="stylesheet" href="../css/style.css?v=1" />
+  <title>Botan Mind | Lista de Plantas</title>
+  <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>" />
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
-
 </head>
 
 <body>
-
   <nav id="menu">
     <ul class="menu-list">
       <li><a href="index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
-      <?php else: ?>
+      <?php if (isset($_SESSION['apoiador_id'])): ?>
         <li><a href="cadastro.php">Cadastro de plantas</a></li>
-      <?php endif; ?>
-      <li><a href="ListaPlantas.php" class="active">Lista de plantas</a></li>
-            <?php if (!isset($_SESSION['apoiador_id'])): ?>
-      <?php else: ?>
         <li><a href="avaliacao.php">Avalie aqui!</a></li>
       <?php endif; ?>
+      <li><a href="ListaPlantas.php" class="active">Lista de plantas</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
         <li><a href="loginapoiador.php">Nos apoie!</a></li>
-      <?php else: ?>
       <?php endif; ?>
     </ul>
 
-    <div class="search-container">
-      <form action="/search" method="get" class="search-form">
-        <input type="text" name="q" class="search-input" placeholder="Pesquisar por plantas">
-        <button type="submit" class="search-button">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-      </form>
-    </div>
-
-    <?php if (!isset($_SESSION['apoiador_id'])): ?>
-    <?php else: ?>
+    <?php if ($nome): ?>
       <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
         <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
         <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
@@ -122,7 +91,9 @@ if (!isset($_SESSION['apoiador_id'])) {
             <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="listar-card-img">
             <div class="listar-card-content">
               <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
-              <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
+              <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                <?= htmlspecialchars($planta['descricao']) ?>
+              </p>
               <span class="read-more-btn">Leia Mais</span>
             </div>
           </a>
@@ -131,6 +102,23 @@ if (!isset($_SESSION['apoiador_id'])) {
         <p>Nenhuma planta encontrada.</p>
       <?php endif; ?>
     </div>
+
+    <!-- PAGINAÇÃO -->
+    <?php if ($total_paginas > 1): ?>
+      <div class="paginacao">
+        <?php if ($pagina_atual > 1): ?>
+          <a href="?pagina=<?= $pagina_atual - 1 ?>">« Anterior</a>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+          <a href="?pagina=<?= $i ?>" class="<?= $i === $pagina_atual ? 'ativo' : '' ?>"><?= $i ?></a>
+        <?php endfor; ?>
+
+        <?php if ($pagina_atual < $total_paginas): ?>
+          <a href="?pagina=<?= $pagina_atual + 1 ?>">Próxima »</a>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
   </main>
 
   <footer class="footer">
@@ -193,5 +181,4 @@ if (!isset($_SESSION['apoiador_id'])) {
 
   </footer>
 </body>
-
 </html>

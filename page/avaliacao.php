@@ -43,98 +43,6 @@ if (isset($_SESSION['apoiador_id'])) {
   <title>Botan Mind | Avaliação de Plantas</title>
   <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>">
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
-  <style>
-    .avaliacao-container {
-      max-width: 1300px;
-      margin: 60px auto;
-      padding: 20px;
-    }
-
-    .titulo-avaliacao {
-      font-size: 32px;
-      text-align: center;
-      color: #f39c12;
-      margin-bottom: 30px;
-    }
-
-    .plantas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
-
-    .planta-card {
-      background-color: #1e1e1e;
-      border-radius: 15px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-      transition: transform 0.2s ease;
-    }
-
-    .planta-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .planta-img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
-
-    .planta-content {
-      padding: 20px;
-      flex-grow: 1;
-    }
-
-    .planta-content h3 {
-      color: #fff;
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-
-    .planta-content p {
-      color: #ccc;
-      font-size: 15px;
-      margin-bottom: 15px;
-    }
-
-    .btn-avaliar {
-      background-color: #1c7924;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .btn-avaliar:hover {
-      background-color: #0f5215;
-    }
-
-    .avaliacao-form {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .avaliacao-form textarea {
-      background-color: #161616;
-      border: none;
-      color: #e0e0e0;
-      padding: 10px;
-      border-radius: 8px;
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    .avaliacao-form button {
-      align-self: flex-end;
-    }
-  </style>
 </head>
 
 <body>
@@ -149,11 +57,12 @@ if (isset($_SESSION['apoiador_id'])) {
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
         <li><a href="loginapoiador.php">Nos apoie!</a></li>
       <?php endif; ?>
+      <li><a href="avaliacao.php">Avalie aqui!</a></li>
     </ul>
 
     <?php if ($nome): ?>
       <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
-        <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+        <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;" >
         <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
       </a>
     <?php endif; ?>
