@@ -35,6 +35,39 @@ if (!isset($_SESSION['apoiador_id'])) {
         if (strlen($cpf) !== 11) return '';
         return substr($cpf, 0, 3) . str_repeat('*', 6) . substr($cpf, -2);
     }
+
+
+    //comentario
+
+    $sql_avaliacao = "SELECT planta_id, descricao FROM avaliacao WHERE apoiador_id = $id";
+    $result_avaliacao = $conn->query($sql_avaliacao);
+
+    $planta_id = $descricao = "";
+    if ($result_avaliacao->num_rows > 0) {
+        $row = $result_avaliacao->fetch_assoc();
+        $planta_id = $row['planta_id'];
+        $descricao = $row['descricao'];
+    }
+
+
+    $sql_planta = "SELECT nome_popular FROM planta WHERE id = $planta_id";
+    $result_planta = $conn->query($sql_planta);
+
+    $nome_planta = "";
+    if ($result_planta->num_rows > 0) {
+        $row = $result_planta->fetch_assoc();
+        $nome_planta = $row['nome_popular'];
+    }
+
+
+    $sql_imagem = "SELECT caminho_imagem FROM imagens WHERE planta_id = $planta_id";
+    $result_imagem = $conn->query($sql_imagem);
+
+    $caminho_imagem = "";
+    if ($result_imagem->num_rows > 0) {
+        $row = $result_imagem->fetch_assoc();
+        $caminho_imagem = $row['caminho_imagem'];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -83,6 +116,25 @@ if (!isset($_SESSION['apoiador_id'])) {
             </div>
         </div>
     </section>
+
+    <?php
+    if ($result_avaliacao && $result_avaliacao->num_rows > 0):
+        while ($av = $result_avaliacao->fetch_assoc()):
+    ?>
+            <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:15px; background-color:#161616; border-radius:10px; padding:10px;">
+                <img src="<?php echo htmlspecialchars($caminho_imagem); ?>"
+                    style="width:50px; height:50px; object-fit:cover; border-radius:50%;">
+                <div>
+                    <strong style="color:#1c7924;"><?php echo htmlspecialchars($nome_planta); ?>:</strong><br>
+                    <span style="color:#ddd;"><?php echo htmlspecialchars($descricao); ?></span>
+                </div>
+            </div>
+    <?php
+        endwhile;
+    else:
+        echo "<p style='color:#aaa;'>Nenhuma avaliação ainda. Seja o primeiro a comentar!</p>";
+    endif;
+    ?>
 
     <script src="../js/index.js?v=1"></script>
 </body>

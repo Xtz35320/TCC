@@ -1,4 +1,4 @@
-<?php
+ <?php
 include_once '../sql/conexao.php';
 $id = $_GET['id'];
 
@@ -113,7 +113,7 @@ if (!isset($_SESSION['apoiador_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Botan Mind</title>
-  <link rel="stylesheet" href="../css/style.css?v=2" />
+  <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>" />
   <link rel="stylesheet" href="../css/mapa.css?v=1">
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
 
@@ -128,32 +128,34 @@ if (!isset($_SESSION['apoiador_id'])) {
     </div>
   </div>
 
-  <nav id="menu">
-    <ul class="menu-list">
-      <li><a href="index.php">Início</a></li>
-      <li><a href="#about">Sobre</a></li>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
-      <?php else: ?>
-        <li><a href="cadastro.php">Cadastro de plantas</a></li>
-      <?php endif; ?>
-      <li><a href="ListaPlantas.php">Lista de plantas</a></li>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
-      <?php else: ?>
-        <li><a href="avaliacao.php">Avalie aqui!</a></li>
-      <?php endif; ?>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
-        <li><a href="loginapoiador.php">Nos apoie!</a></li>
-      <?php else: ?>
-      <?php endif; ?>
-    </ul>
+<nav id="menu">
+  <ul class="menu-list">
+    <li><a href="index.php">Início</a></li>
+    <li><a href="#about">Sobre</a></li>
     <?php if (!isset($_SESSION['apoiador_id'])): ?>
     <?php else: ?>
-      <a href="./perfil.php" style="display:flex; align-items:center; gap:10px; ">
-        <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-        <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
-      </a>
+      <li><a href="cadastro.php">Cadastro de plantas</a></li>
     <?php endif; ?>
-  </nav>
+    <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+    <?php if (!isset($_SESSION['apoiador_id'])): ?>
+    <?php else: ?>
+      <li><a href="avaliacao.php">Avalie aqui!</a></li>
+    <?php endif; ?>
+    <?php if (!isset($_SESSION['apoiador_id'])): ?>
+      <li><a href="loginapoiador.php">Nos apoie!</a></li>
+    <?php else: ?>
+    <?php endif; ?>
+  </ul>
+
+  <?php if (!isset($_SESSION['apoiador_id'])): ?>
+  <?php else: ?>
+    <a href="./perfil.php" class="menu-usuario" style="display:flex; align-items:center; gap:10px;">
+      <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+      <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+    </a>
+  <?php endif; ?>
+</nav>
+
 
   <div class="cabeca">
 
@@ -209,7 +211,7 @@ if (!isset($_SESSION['apoiador_id'])) {
 
       <div class="card" id="video">
         <h1 class="titulo">Vídeo sobre <?php echo htmlspecialchars($nome_popular) ?></h1>
-        <iframe class="video"
+        <iframe class="video" style="aspect-ratio: 16 / 9;"
           src="<?php echo htmlspecialchars($video_link) ?>"
           title="YouTube video"
           frameborder="0"
@@ -343,12 +345,10 @@ if (!isset($_SESSION['apoiador_id'])) {
       </div>
 
 
-      <!-- Avaliações da planta -->
       <div class="card">
         <h1 class="titulo">Avaliações sobre <?php echo htmlspecialchars($nome_popular); ?></h1>
 
         <?php
-        // Busca as avaliações dessa planta
         $sql_avaliacoes = "
             SELECT a.descricao, ap.nome, ap.imagem 
             FROM avaliacao a
@@ -387,7 +387,7 @@ if (!isset($_SESSION['apoiador_id'])) {
             </button>
           </form>
         <?php else: ?>
-          <p style="margin-top:10px;">💬 <a href="loginapoiador.php" style="color:#1c7924;">Faça login como apoiador</a> para deixar sua avaliação.</p>
+          <p style="margin-top:10px;"><a href="loginapoiador.php" style="color:#1c7924;">Faça login como apoiador</a> para deixar sua avaliação.</p>
         <?php endif; ?>
       </div>
     </div>
