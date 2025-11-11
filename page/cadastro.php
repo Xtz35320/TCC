@@ -337,36 +337,6 @@ if ($result_apoiador->num_rows > 0) {
 
   </nav>
 
-  <!-- Botão de Preenchimento Automático -->
-  <div class="btn-container" style="margin-top: 50px;">
-    <button type="button" class="btn_cadastro" onclick="preencherFormulario()">Preencher Automaticamente</button>
-  </div>
-
-  <script>
-    function preencherFormulario() {
-      // Campos de texto simples
-      document.querySelector('[name="nome_popular"]').value = "Teste automatizado";
-      document.querySelector('[name="nome_cientifico"]').value = "Teste automatizado";
-      document.querySelector('[name="descricao"]').value = "Teste automatizado";
-      document.querySelector('[name="cuidados"]').value = "Teste automatizado";
-      document.querySelector('[name="video_link"]').value = "https://www.youtube.com/embed/8P-zRYfbmYQ?si=6jNfJNS8_dog89H0";
-
-      // Classificação taxonômica
-      document.querySelector('[name="reino"]').value = "Teste automatizado";
-      document.querySelector('[name="divisao"]').value = "Teste automatizado";
-      document.querySelector('[name="classe"]').value = "Teste automatizado";
-      document.querySelector('[name="ordem"]').value = "Teste automatizado";
-      document.querySelector('[name="familia"]').value = "Teste automatizado";
-      document.querySelector('[name="genero"]').value = "Teste automatizado";
-      document.querySelector('[name="especie"]').value = "Teste automatizado";
-
-      // Documento (apenas título e tipo, sem arquivo)
-      document.querySelector('[name="titulo_documento"]').value = "Teste automatizado";
-      document.querySelector('[name="tipo_documento"]').value = "Teste automatizado";
-    }
-  </script>
-
-
   <div class="form-cadastro-planta-container">
     <h2 class="h2c">Cadastro de Planta</h2>
 

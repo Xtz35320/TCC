@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 29, 2025 at 08:34 PM
+-- Generation Time: Nov 11, 2025 at 07:08 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -229,16 +229,54 @@ INSERT INTO `imagens` (`id`, `planta_id`, `caminho_imagem`, `descricao`) VALUES
 (27, 24, '../assets/img/68baefcec4a2e_Imperial_palm_trees.JPG', 'Imagem de Palmeira Imperial'),
 (28, 25, '../assets/img/68baf21073e55_banana.jpg', 'Imagem de Bananeira'),
 (29, 25, '../assets/img/68baf210745ea_Bananeira-1.jpg', 'Imagem de Bananeira'),
-(30, 26, '../assets/img/Handroanthus_serratifolius.jpg', NULL),
-(31, 26, '../assets/img/ipe_amarelo.jpg', NULL),
-(32, 27, '../assets/img/vitoria-regia-1140515.jpg', NULL),
-(33, 27, '../assets/img/Vitregias02.jpg', NULL),
+(30, 26, '../assets/img/Handroanthus_serratifolius.jpg', 'Imagem de ipe'),
+(31, 26, '../assets/img/ipe_amarelo.jpg', 'Imagem de ipe'),
+(32, 27, '../assets/img/vitoria-regia-1140515.jpg', 'Imagem de vitoria regia'),
+(33, 27, '../assets/img/Vitregias02.jpg', 'Imagem de vitoria regia'),
 (34, 28, '../assets/img/Mandacaru_arvore.webp', NULL),
 (35, 28, '../assets/img/Cereus_jamacaru.jpg', NULL),
-(36, 29, '../assets/img/araucaria.jpg', NULL),
-(37, 29, '../assets/img/Araucaria2.jpg', NULL),
-(38, 30, '../assets/img/jatoba.jpg', NULL),
-(39, 30, '../assets/img/Jatobá-1-768x1024.jpg', NULL);
+(36, 29, '../assets/img/araucaria.jpg', 'Imagem de araucaria'),
+(37, 29, '../assets/img/Araucaria2.jpg', 'Imagem de araucaria'),
+(38, 30, '../assets/img/jatoba.jpg', 'Imagem de jatoba'),
+(39, 30, '../assets/img/Jatobá-1-768x1024.jpg', 'Imagem de jatoba'),
+(40, 31, '../assets/img/espada-de-sao-jorge.webp', NULL),
+(41, 31, '../assets/img/espada-de-sao-jorge.webp', NULL),
+(42, 32, '../assets/img/suculenta.webp', NULL),
+(43, 32, '../assets/img/suculenta2.webp', NULL),
+(44, 33, '../assets/img/orquidea.jpg', NULL),
+(45, 33, '../assets/img/orquidea2.webp', NULL),
+(46, 34, '../assets/img/bambu.jpg', NULL),
+(47, 34, '../assets/img/bambu2.jpeg', NULL),
+(48, 35, '../assets/img/copo de leite.webp', NULL),
+(49, 35, '../assets/img/copo-de-leite2.jpeg', NULL),
+(50, 36, '../assets/img/girassol.jpeg', NULL),
+(51, 36, '../assets/img/girassol2.jpeg', NULL),
+(52, 37, '../assets/img/lavanda.jpeg', NULL),
+(53, 37, '../assets/img/lavanda2.webp', NULL),
+(54, 38, '../assets/img/hortela.jpeg', NULL),
+(55, 38, '../assets/img/hortela.jpg', NULL),
+(56, 39, '../assets/img/rosa.jpeg', NULL),
+(57, 39, '../assets/img/rosa2.jpeg', NULL),
+(58, 40, '../assets/img/tomate.jpeg', NULL),
+(59, 40, '../assets/img/tomate2.jpeg', NULL),
+(60, 41, '../assets/img/manjericao.jpg', NULL),
+(61, 41, '../assets/img/manjericao2.webp', NULL),
+(62, 43, '../assets/img/alface.jpeg', NULL),
+(63, 43, '../assets/img/alface2.jpg', NULL),
+(64, 44, '../assets/img/crisantemo.jpeg', NULL),
+(65, 44, '../assets/img/crisantemo2.jpeg', NULL),
+(66, 45, '../assets/img/pimenta_1.webp', NULL),
+(67, 45, '../assets/img/pimenta2.webp', NULL),
+(68, 46, '../assets/img/salvia.jpeg', NULL),
+(69, 46, '../assets/img/salvia2.jpeg', NULL),
+(72, 47, '../assets/img/alecrim.jpeg', NULL),
+(73, 47, '../assets/img/alecrim2.webp', NULL),
+(74, 48, '../assets/img/cebolinha.webp', NULL),
+(75, 48, '../assets/img/cebolinha2.jpg', NULL),
+(76, 49, '../assets/img/violeta.jpeg', NULL),
+(77, 49, '../assets/img/violeta2.jpeg', NULL),
+(78, 50, '../assets/img/coentro.webp', NULL),
+(79, 50, '../assets/img/coentro2.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -875,7 +913,7 @@ ALTER TABLE `documentos`
 -- AUTO_INCREMENT for table `imagens`
 --
 ALTER TABLE `imagens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `planta`
