@@ -23,7 +23,7 @@ if ($result_apoiador->num_rows > 0) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro de Planta</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>">
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
   <style>
     /* Estilos específicos para o formulário de cadastro */
@@ -37,267 +37,7 @@ if ($result_apoiador->num_rows > 0) {
       overflow-x: hidden;
     }
 
-    .form-cadastro-planta-container {
-      display: flex;
-      flex-direction: column;
-      min-height: calc(100vh - 55px);
-      padding: 20px;
-      margin-top: 55px;
-      width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
-
-    .h2c {
-      text-align: center;
-      color: #e0e0e0;
-      margin: 20px 0;
-      font-size: 32px;
-    }
-
-    .form-cadastro-planta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      flex-grow: 1;
-      width: 100%;
-    }
-
-    @media (max-width: 1200px) {
-      .form-cadastro-planta-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .form-section {
-      background-color: #1e1e1e;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-      width: 100%;
-      overflow: hidden;
-    }
-
-    .form-section h3 {
-      color: #1c7924;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #333;
-      font-size: 22px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-      width: 100%;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #e0e0e0;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      max-width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      background-color: #161616;
-      font-size: 15px;
-      border: none;
-      color: #e0e0e0;
-      transition: border-color 0.3s;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      border-color: #1c7924;
-      outline: none;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .caracteristicas-grid {
-      display: grid;
-      gap: 15px;
-      width: 100%;
-    }
-
-    @media (max-width: 768px) {
-      .caracteristicas-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .h2c {
-        font-size: 26px;
-      }
-
-      .form-section {
-        padding: 15px;
-      }
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    .mapa-section {
-      min-height: 400px;
-    }
-
-    .btn-container {
-      grid-column: 1 / -1;
-      text-align: center;
-      margin-top: 20px;
-      width: 100%;
-    }
-
-    .estados-selecionados {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #161616;
-      border-radius: 8px;
-      min-height: 57px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-    }
-
-
-    .estado-tag {
-      display: inline-block;
-      background-color: #f39c12;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      margin: 5px;
-      font-size: 14px;
-    }
-
-    /* Melhorias para dispositivos muito pequenos */
-    @media (max-width: 480px) {
-      .form-cadastro-planta-container {
-        padding: 10px;
-      }
-
-      .form-section {
-        padding: 12px;
-      }
-
-      .form-group input,
-      .form-group textarea,
-      .form-group select {
-        padding: 10px;
-      }
-
-      .btn_cadastro {
-        padding: 12px 25px;
-        font-size: 16px;
-      }
-    }
-
-    .mapa-section {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    .map-cad {
-      max-width: 30%;
-      padding: 20px;
-    }
-
-    /* Estilo para botões de estado ativos */
-    .estado-btn.active {
-      background-color: #f39c12 !important;
-      transition: 300ms;
-    }
-
-
-
-    /* NOVOS ESTILOS PARA HOVER NOS ESTADOS */
-    #mapa-container path.estado {
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    #mapa-container path.estado:hover {
-      fill: #1c7924 !important;
-      stroke: #fff;
-      stroke-width: 1.5;
-      filter: drop-shadow(0 0 5px rgba(26, 116, 34, 0.7));
-    }
-
-    #mapa-container path.estado.active:hover {
-      fill: #e67e22 !important;
-      filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
-    }
-
-    #mapa-container path.estado.active {
-      filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
-    }
-
-    .estado-btn {
-      padding: 8px 15px;
-      background: #333;
-      border: none;
-      border-radius: 5px;
-      color: #e0e0e0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .estado-btn:hover {
-      background-color: #1b7522ff !important;
-      transform: translateY(-2px);
-    }
-
-    .estado-btn.active:hover {
-      background-color: #e67e22 !important;
-      filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
-    }
-
-
-    /* Tooltip para mostrar o nome do estado */
-    .tooltip.active {
-      pointer-events: none;
-      position: absolute;
-      font-size: 18px;
-      text-align: center;
-      background: #1e1e1e;
-      padding: 10px 15px;
-      z-index: 5;
-      height: 30px;
-      line-height: 30px;
-      margin: 0 auto;
-      color: #1c7924;
-      border-radius: 5px;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-    }
-
-    .tooltip:after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 100%;
-      width: 0;
-      height: 0;
-      margin-left: -10px;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #1e1e1e;
-    }
+    
   </style>
 
 </head>
@@ -314,18 +54,6 @@ if ($result_apoiador->num_rows > 0) {
           <li><a href="avaliacao.php">Avalie aqui!</a></li>
       <?php endif; ?>
     </ul>
-    <div class="search-container">
-      <form class="search-form">
-        <input type="text" placeholder="Pesquisar..." class="search-input">
-        <button type="submit" class="search-button">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
-      </form>
-    </div>
 
     <?php if (!isset($_SESSION['apoiador_id'])): ?>
     <?php else: ?>
@@ -524,7 +252,7 @@ if ($result_apoiador->num_rows > 0) {
 
       </div>
     </div>
-    <p>© 2024 Plantcare. Todos os direitos reservados.</p>
+    <p>© 2025 Plantcare. Todos os direitos reservados.</p>
 
   </footer>
 

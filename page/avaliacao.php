@@ -9,7 +9,7 @@ SELECT
     (
         SELECT caminho_imagem 
         FROM imagens i 
-        WHERE i.planta_id = p.id 
+        WHERE i.planta_id = p.id  
         ORDER BY i.id ASC 
         LIMIT 1
     ) AS caminho_imagem

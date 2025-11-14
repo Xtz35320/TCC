@@ -15,12 +15,6 @@
       <li><a href="#about">Sobre</a></li>
       <li><a href="./ListaPlantas.php">Lista de plantas</a></li>
     </ul>
-    <div class="search-container">
-      <form action="/search" method="get" class="search-form"> <input type="text" name="q" class="search-input" placeholder="Pesquisar por plantas"> <button type="submit" class="search-button"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg> </button> </form>
-    </div>
   </nav>
 
 
@@ -77,7 +71,7 @@
         <label>Email: <input type="email" name="email" required></label><br>
         <label>CPF: <input type="text" name="cpf" required  maxlength="11"></label><br>
         <label>Emprego: <input type="text" name="emprego"></label><br>
-        <label>Senha: <input type="password" name="senha" required></label><br>
+        <label>Senha: <input type="password" name="senha" minlength="8" required></label><br>
         <label>Imagem (opcional): <input type="file" name="imagem" accept="image/*"></label><br>
         <button type="submit" class="btn_cadastro" style="width:100%;">Cadastrar</button>
       </form>
@@ -134,7 +128,7 @@
       </a>
     </div>
   </div>
-  <p>© 2024 Plantcare. Todos os direitos reservados.</p>
+  <p>© 2025 Plantcare. Todos os direitos reservados.</p>
 </footer>
 
 </html>

@@ -20,8 +20,6 @@ window.onclick = function(event) {
   }
 }
 
-
-
 const description = document.querySelector(".tooltip");
 
 document.querySelectorAll('path').forEach(path => {
@@ -37,7 +35,6 @@ document.querySelectorAll('path').forEach(path => {
   });
 });
 
-// Move a tooltip com limite de tela
 document.addEventListener('mousemove', e => {
   const tooltipWidth = description.offsetWidth;
   const tooltipHeight = description.offsetHeight;
@@ -58,7 +55,7 @@ document.addEventListener('mousemove', e => {
 });
 
 
-let indice = 0; // Começa na primeira imagem
+let indice = 0; 
 
   function mudarSlide(direcao) {
     const imagens = document.getElementById("imagens");
@@ -70,13 +67,13 @@ let indice = 0; // Começa na primeira imagem
   window.addEventListener('scroll', function() {
     const menu = document.getElementById('menu');
     if (window.scrollY < 270) {
-      menu.classList.add('topo'); // está no topo
+      menu.classList.add('topo'); 
     } else {
-      menu.classList.remove('topo'); // rolou para baixo
+      menu.classList.remove('topo'); 
     }
   });
 
-  // Executa na carga inicial
+
   window.dispatchEvent(new Event('scroll'));
 
 

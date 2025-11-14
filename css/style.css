@@ -805,33 +805,33 @@ hr {
   flex-grow: 1;
 }
 
-    .paginacao {
-      display: flex;
-      justify-content: center;
-      margin: 30px 0;
-      gap: 8px;
-    }
+.paginacao {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  gap: 8px;
+}
 
-    .paginacao a {
-      color: #e0e0e0;
-      padding: 8px 14px;
-      border-radius: 6px;
-      background-color: #1e1e1e;
-      border: 1px solid #333;
-      text-decoration: none;
-      transition: background-color 0.3s;
-    }
+.paginacao a {
+  color: #e0e0e0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
 
-    .paginacao a:hover {
-      background-color: #1c7924;
-      color: #fff;
-    }
+.paginacao a:hover {
+  background-color: #1c7924;
+  color: #fff;
+}
 
-    .paginacao .ativo {
-      background-color: #1c7924;
-      color: white;
-      pointer-events: none;
-    }
+.paginacao .ativo {
+  background-color: #1c7924;
+  color: white;
+  pointer-events: none;
+}
 
 /* =========================
     RODAPÉ
@@ -1028,93 +1028,352 @@ svg {
     AVALIAÇÃO
     ========================= */
 
-    .avaliacao-container {
-      max-width: 1300px;
-      margin: 60px auto;
-      padding: 20px;
-    }
+.avaliacao-container {
+  max-width: 1300px;
+  margin: 60px auto;
+  padding: 20px;
+}
 
-    .titulo-avaliacao {
-      font-size: 32px;
-      text-align: center;
-      color: #f39c12;
-      margin-bottom: 30px;
-    }
+.titulo-avaliacao {
+  font-size: 32px;
+  text-align: center;
+  color: #f39c12;
+  margin-bottom: 30px;
+}
 
-    .plantas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
+.plantas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+}
 
-    .planta-card {
-      background-color: #1e1e1e;
-      border-radius: 15px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-      transition: transform 0.2s ease;
-    }
+.planta-card {
+  background-color: #1e1e1e;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  transition: transform 0.2s ease;
+}
 
-    .planta-card:hover {
-      transform: translateY(-5px);
-    }
+.planta-card:hover {
+  transform: translateY(-5px);
+}
 
-    .planta-img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
+.planta-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
 
-    .planta-content {
-      padding: 20px;
-      flex-grow: 1;
-    }
+.planta-content {
+  padding: 20px;
+  flex-grow: 1;
+}
 
-    .planta-content h3 {
-      color: #fff;
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
+.planta-content h3 {
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
 
-    .planta-content p {
-      color: #ccc;
-      font-size: 15px;
-      margin-bottom: 15px;
-    }
+.planta-content p {
+  color: #ccc;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
 
-    .btn-avaliar {
-      background-color: #1c7924;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+.btn-avaliar {
+  background-color: #1c7924;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-    .btn-avaliar:hover {
-      background-color: #0f5215;
-    }
+.btn-avaliar:hover {
+  background-color: #0f5215;
+}
 
-    .avaliacao-form {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.avaliacao-form {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
 
-    .avaliacao-form textarea {
-      background-color: #161616;
-      border: none;
-      color: #e0e0e0;
-      padding: 10px;
-      border-radius: 8px;
-      resize: vertical;
-      min-height: 60px;
-    }
+.avaliacao-form textarea {
+  background-color: #161616;
+  border: none;
+  color: #e0e0e0;
+  padding: 10px;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 60px;
+}
 
-    .avaliacao-form button {
-      align-self: flex-end;
-    }
+.avaliacao-form button {
+  align-self: flex-end;
+}
+
+/* =========================
+    Cadastro de Planta
+    ========================= */
+
+.form-cadastro-planta-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 55px);
+  padding: 20px;
+  margin-top: 55px;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.form-cadastro-planta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex-grow: 1;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .form-cadastro-planta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-section {
+  background-color: #1e1e1e;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  overflow: hidden;
+}
+
+.form-section h3 {
+  color: #1c7924;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #333;
+  font-size: 22px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #e0e0e0;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #161616;
+  font-size: 15px;
+  border: none;
+  color: #e0e0e0;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #1c7924;
+  outline: none;
+}
+
+.caracteristicas-grid {
+  display: grid;
+  gap: 15px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .caracteristicas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .h2c {
+    font-size: 26px;
+  }
+
+  .form-section {
+    padding: 15px;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+
+.btn-container {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.estados-selecionados {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #161616;
+  border-radius: 8px;
+  min-height: 57px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+
+.estado-tag {
+  display: inline-block;
+  background-color: #f39c12;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin: 5px;
+  font-size: 14px;
+}
+
+/* Melhorias para dispositivos muito pequenos */
+@media (max-width: 480px) {
+  .form-cadastro-planta-container {
+    padding: 10px;
+  }
+
+  .form-section {
+    padding: 12px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 10px;
+  }
+
+  .btn_cadastro {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+}
+
+.mapa-section {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.map-cad {
+  max-width: 30%;
+  padding: 20px;
+}
+
+/* Estilo para botões de estado ativos */
+.estado-btn.active {
+  background-color: #f39c12 !important;
+  transition: 300ms;
+}
+
+
+
+/* NOVOS ESTILOS PARA HOVER NOS ESTADOS */
+#mapa-container path.estado {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+#mapa-container path.estado:hover {
+  fill: #1c7924 !important;
+  stroke: #fff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 5px rgba(26, 116, 34, 0.7));
+}
+
+#mapa-container path.estado.active:hover {
+  fill: #e67e22 !important;
+  filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
+}
+
+#mapa-container path.estado.active {
+  filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
+}
+
+.estado-btn {
+  padding: 8px 15px;
+  background: #333;
+  border: none;
+  border-radius: 5px;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.estado-btn:hover {
+  background-color: #1b7522ff !important;
+  transform: translateY(-2px);
+}
+
+.estado-btn.active:hover {
+  background-color: #e67e22 !important;
+  filter: drop-shadow(0 0 5px rgba(230, 126, 34, 0.7));
+}
+
+
+/* Tooltip para mostrar o nome do estado */
+.tooltip.active {
+  pointer-events: none;
+  position: absolute;
+  font-size: 18px;
+  text-align: center;
+  background: #1e1e1e;
+  padding: 10px 15px;
+  z-index: 5;
+  height: 30px;
+  line-height: 30px;
+  margin: 0 auto;
+  color: #1c7924;
+  border-radius: 5px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.tooltip:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 0;
+  height: 0;
+  margin-left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #1e1e1e;
+}
+
+
+
+/* =========================
+    FIM DO CSS (por enquato)
+   ========================= */
+
+   

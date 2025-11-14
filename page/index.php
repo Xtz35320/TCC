@@ -66,7 +66,7 @@ if (!isset($_SESSION['apoiador_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Botan Mind</title>
-  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>" />
   <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
 </head>
 
@@ -75,7 +75,7 @@ if (!isset($_SESSION['apoiador_id'])) {
   <nav id="menu">
     <ul class="menu-list">
       <li><a href="#" class="active">Início</a></li>
-      <li><a href="#about">Sobre</a></li>
+      <li><a href="sobre.php">Sobre</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
       <?php else: ?>
         <li><a href="cadastro.php">Cadastro de plantas</a></li>
@@ -90,17 +90,7 @@ if (!isset($_SESSION['apoiador_id'])) {
       <?php else: ?>
       <?php endif; ?>
     </ul>
-    <div class="search-container">
-      <form action="/search" method="get" class="search-form">
-        <input type="text" name="q" class="search-input" placeholder="Pesquisar por plantas">
-        <button type="submit" class="search-button">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-      </form>
-    </div>
+
 
     <?php if (!isset($_SESSION['apoiador_id'])): ?>
     <?php else: ?>
@@ -144,14 +134,19 @@ if (!isset($_SESSION['apoiador_id'])) {
     </div>
   </main>
 
+
+  <?php if (!isset($_SESSION['apoiador_id'])): ?>
     <div style="width:100%; background: #196901ff; padding:40px 20px; text-align:center;">
-    <h2>Ajude a manter o Botan Mind vivo!</h2>
-    <p>Nosso site é feito com dedicação para compartilhar conhecimento sobre o mundo das plantas. 
-    Seu apoio é fundamental para continuarmos crescendo.</p>
-    <a href="./loginapoiador.php">
-      <button class="btn_cadastro"> Junte-se a nós</button>
-    </a>
-  </div>
+      <h2>Ajude a manter o Botan Mind vivo!</h2>
+      <p>Nosso site é feito com dedicação para compartilhar conhecimento sobre o mundo das plantas.
+        Seu apoio é fundamental para continuarmos crescendo.</p>
+      <a href="./loginapoiador.php">
+        <button class="btn_cadastro"> Junte-se a nós</button>
+      </a>
+    </div>
+  <?php else: ?>
+  <?php endif; ?>
+
 
   <footer class="footer">
     <div class="rodape">
@@ -172,19 +167,10 @@ if (!isset($_SESSION['apoiador_id'])) {
           <h5>Contato</h5>
         </a>
       </div>
+
       <div class="paginas-rodape">
-        <a href="#">
-          <h5>Início</h5>
-        </a>
-        <a href="ListaPlantas.php">
-          <h5>Lista de planta</h5>
-        </a>
-        <a href="sobre.php">
-          <h5>Sobre</h5>
-        </a>
-        <a href="contato.php">
-          <h5>Contato</h5>
-        </a>
+
+
       </div>
 
       <div class="redes-sociais">
@@ -209,7 +195,7 @@ if (!isset($_SESSION['apoiador_id'])) {
 
       </div>
     </div>
-    <p>© 2024 Plantcare. Todos os direitos reservados.</p>
+    <p>© 2025 Plantcare. Todos os direitos reservados.</p>
 
   </footer>
 </body>

@@ -2,45 +2,71 @@
 include_once '../sql/conexao.php';
 include_once '../php/loginapoiador.php';
 
-
-// ======== CONFIGURAÇÃO DE PAGINAÇÃO ======== //
 $plantas_por_pagina = 12;
 $pagina_atual = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina_atual - 1) * $plantas_por_pagina;
 
+$busca = isset($_GET['q']) ? trim($_GET['q']) : "";
 
-// ======== CONSULTA PRINCIPAL ======== //
-$sql = "
-SELECT 
-    p.id, p.nome_popular, p.nome_cientifico, p.descricao, p.cuidados, p.video_link,
-    (
-        SELECT caminho_imagem 
-        FROM imagens i 
-        WHERE i.planta_id = p.id 
-        ORDER BY i.id ASC 
-        LIMIT 1
-    ) AS caminho_imagem
-FROM planta p
-ORDER BY p.nome_popular ASC
-LIMIT $plantas_por_pagina OFFSET $offset
-";
+if ($busca !== "") {
+    $busca_sql = $conn->real_escape_string($busca);
+
+    $sql = "
+        SELECT 
+            p.id, p.nome_popular, p.descricao,
+            (
+                SELECT caminho_imagem 
+                FROM imagens i 
+                WHERE i.planta_id = p.id 
+                ORDER BY id ASC 
+                LIMIT 1
+            ) AS caminho_imagem
+        FROM planta p
+        WHERE 
+            p.nome_popular LIKE '%$busca_sql%' 
+        ORDER BY p.nome_popular ASC
+        LIMIT $plantas_por_pagina OFFSET $offset
+    ";
+
+    $sql_total = "
+        SELECT COUNT(*) AS total 
+        FROM planta 
+        WHERE nome_popular LIKE '%$busca_sql%' 
+        OR nome_cientifico LIKE '%$busca_sql%'
+    ";
+
+} else {
+    $sql = "
+        SELECT 
+            p.id, p.nome_popular,  p.descricao,
+            (
+                SELECT caminho_imagem 
+                FROM imagens i 
+                WHERE i.planta_id = p.id 
+                ORDER BY id ASC 
+                LIMIT 1
+            ) AS caminho_imagem
+        FROM planta p
+        ORDER BY p.nome_popular ASC
+        LIMIT $plantas_por_pagina OFFSET $offset
+    ";
+
+    $sql_total = "SELECT COUNT(*) AS total FROM planta";
+}
+
 $result = $conn->query($sql);
 $plantas = $result && $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
-
-// ======== TOTAL DE PLANTAS (para calcular páginas) ======== //
-$sql_total = "SELECT COUNT(*) AS total FROM planta";
 $total_result = $conn->query($sql_total);
 $total_plantas = $total_result ? $total_result->fetch_assoc()['total'] : 0;
 $total_paginas = ceil($total_plantas / $plantas_por_pagina);
 
-
-// ======== DADOS DO APOIADOR ======== //
 $nome = $imagem = "";
 if (isset($_SESSION['apoiador_id'])) {
     $id = $_SESSION['apoiador_id'];
     $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
     $result_apoiador = $conn->query($sql_apoiador);
+
     if ($result_apoiador && $result_apoiador->num_rows > 0) {
         $row = $result_apoiador->fetch_assoc();
         $nome = $row['nome'];
@@ -74,6 +100,19 @@ if (isset($_SESSION['apoiador_id'])) {
       <?php endif; ?>
     </ul>
 
+    <div class="search-container">
+      <form action="ListaPlantas.php" method="get" class="search-form">
+        <input type="text" name="q" class="search-input" placeholder="Pesquisar por plantas">
+        <button type="submit" class="search-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
+
+    </div>
+
     <?php if ($nome): ?>
       <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
         <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
@@ -103,7 +142,6 @@ if (isset($_SESSION['apoiador_id'])) {
       <?php endif; ?>
     </div>
 
-    <!-- PAGINAÇÃO -->
     <?php if ($total_paginas > 1): ?>
       <div class="paginacao">
         <?php if ($pagina_atual > 1): ?>
@@ -177,8 +215,9 @@ if (isset($_SESSION['apoiador_id'])) {
 
       </div>
     </div>
-    <p>© 2024 Plantcare. Todos os direitos reservados.</p>
+    <p>© 2025 Plantcare. Todos os direitos reservados.</p>
 
   </footer>
 </body>
+
 </html>

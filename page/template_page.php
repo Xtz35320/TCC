@@ -407,8 +407,8 @@ if (!isset($_SESSION['apoiador_id'])) {
         </div>
       </div>
     </div>
-
-    <script src="../js/index.js?v=1"></script>
+    
+  <script src="../js/index.js?v=1"></script>
 
 </body>
 
