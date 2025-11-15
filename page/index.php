@@ -167,11 +167,29 @@ if (!isset($_SESSION['apoiador_id'])) {
           <h5>Contato</h5>
         </a>
       </div>
+      <div class="email">
+        <form id="form-email" style="display:flex; flex-direction:column; gap:4px; width:240px;">
 
-      <div class="paginas-rodape">
+          <input type="text" name="nome" placeholder="Nome"
+            required
+            style="padding:3px 5px; font-size:12px; height:24px;">
 
+          <input type="email" name="email" placeholder="E-mail"
+            required
+            style="padding:3px 5px; font-size:12px; height:24px;">
 
+          <input name="mensagem" placeholder="Mensagem" required
+            style="padding:3px 5px; font-size:12px; height:25px; resize:none;"></input>
+
+          <button id="btn-enviar" type="submit"
+            style="padding:4px; background:#196901; color:#fff; border:none; cursor:pointer; font-size:12px; height:26px;">
+            Enviar
+          </button>
+
+          <p id="status-msg" style="font-size:11px; margin:0;"></p>
+        </form>
       </div>
+
 
       <div class="redes-sociais">
 
@@ -198,6 +216,40 @@ if (!isset($_SESSION['apoiador_id'])) {
     <p>© 2025 Plantcare. Todos os direitos reservados.</p>
 
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      emailjs.init("wucfVf2nDk31TnkRP");
+
+      const form = document.getElementById("form-email");
+      const statusMsg = document.getElementById("status-msg");
+      const btn = document.getElementById("btn-enviar");
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        btn.disabled = true;
+        btn.style.opacity = "0.6";
+        statusMsg.textContent = "Enviando...";
+
+        emailjs.sendForm("service_05rwahm", "template_gvh46zt", form)
+          .then(function(response) {
+            statusMsg.textContent = "Mensagem enviada com sucesso.";
+            form.reset();
+          }, function(error) {
+            console.error("EmailJS error:", error);
+            statusMsg.textContent = "Erro ao enviar. Tente novamente.";
+          })
+          .finally(function() {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+          });
+      });
+    });
+  </script>
+
 </body>
 <script src="../js/index.js"></script>
 

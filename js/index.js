@@ -75,6 +75,3 @@ let indice = 0;
 
 
   window.dispatchEvent(new Event('scroll'));
-
-
-  

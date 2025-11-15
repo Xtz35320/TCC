@@ -786,6 +786,7 @@ hr {
 .listar-card {
   background-color: #1e1e1e;
   border-radius: 15px;
+  max-width: 405px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
