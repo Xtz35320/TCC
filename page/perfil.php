@@ -15,6 +15,7 @@ if (!isset($_SESSION['apoiador_id'])) {
     $nome = $imagem = $cpf = $emprego = $email = "";
 } else {
     $id = $_SESSION['apoiador_id'];
+    $tipo = $_SESSION['apoiador_tipo'];
 
     $sql_apoiador = "SELECT id, nome, imagem, cpf, emprego, email FROM usuarios WHERE id = $id";
     $result_apoiador = $conn->query($sql_apoiador);
@@ -81,8 +82,9 @@ if ($result_planta->num_rows > 0) {
         <ul class="menu-list">
             <li><a href="index.php">Início</a></li>
             <li><a href="#about">Sobre</a></li>
-            <?php if (isset($_SESSION['apoiador_id'])): ?>
+            <?php if (isset($_SESSION['apoiador_id']) && ($_SESSION['apoiador_tipo'] == 'apoiador' || $_SESSION['apoiador_tipo'] == 'admin')): ?>
                 <li><a href="cadastro.php">Cadastro de plantas</a></li>
+            <?php else: ?>
             <?php endif; ?>
             <li><a href="ListaPlantas.php">Lista de plantas</a></li>
             <?php if (!isset($_SESSION['apoiador_id'])): ?>
@@ -120,25 +122,27 @@ if ($result_planta->num_rows > 0) {
 
 
     </section>
-<main class="recentes-container">
-    <h2 class="titulo-recentes">Plantas cadastradas pelo usuário</h2>
-    <div class="recentes-grid">
-      <?php if (count($plantas) > 0): ?>
-        <?php foreach ($plantas as $planta): ?>
-          <a href="template_page.php?id=<?= htmlspecialchars($planta['id']) ?>" class="recentes-card">
-            <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="recentes-card-img">
-            <div class="recentes-card-content">
-              <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
-              <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
-              <span class="read-more-btn">Leia Mais</span>
-            </div>
-          </a>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p>Nenhuma planta encontrada.</p>
-      <?php endif; ?>
-    </div>
-  </main>
+    <?php if (isset($_SESSION['apoiador_id']) && ($_SESSION['apoiador_tipo'] == 'apoiador' || $_SESSION['apoiador_tipo'] == 'admin')): ?>
+    <main class="recentes-container">
+        <h2 class="titulo-recentes">Plantas cadastradas pelo usuário</h2>
+        <div class="recentes-grid">
+            <?php if (count($plantas) > 0): ?>
+                <?php foreach ($plantas as $planta): ?>
+                    <a href="template_page.php?id=<?= htmlspecialchars($planta['id']) ?>" class="recentes-card">
+                        <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="recentes-card-img">
+                        <div class="recentes-card-content">
+                            <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
+                            <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
+                            <span class="read-more-btn">Leia Mais</span>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Nenhuma planta encontrada.</p>
+            <?php endif; ?>
+        </div>
+    </main>
+    <?php endif; ?>
 
     <footer class="footer">
         <div class="rodape">

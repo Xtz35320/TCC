@@ -88,7 +88,7 @@ if (!isset($_SESSION['apoiador_id'])) {
         <li><a href="login.php">Login</a></li>
         <?php else: ?>
           <?php endif; ?>
-    </ul>
+        </ul>
 
 
     <?php if (!isset($_SESSION['apoiador_id'])): ?>
