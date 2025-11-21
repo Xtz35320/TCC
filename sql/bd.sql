@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 6.0.0-dev+20250718.d42db65a1e
+-- version 6.0.0-dev+20251111.102c4d8cbc
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 11, 2025 at 07:08 PM
+-- Generation Time: Nov 21, 2025 at 11:50 AM
 -- Server version: 8.4.3
--- PHP Version: 8.3.16
+-- PHP Version: 8.3.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,40 +49,15 @@ INSERT INTO `aplicacoes_biotec` (`id`, `planta_id`, `texto`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `apoiador`
---
-
-CREATE TABLE `apoiador` (
-  `id` int NOT NULL,
-  `nome` varchar(250) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `cpf` varchar(15) DEFAULT NULL,
-  `emprego` varchar(255) DEFAULT NULL,
-  `imagem` varchar(500) DEFAULT NULL,
-  `senha` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `apoiador`
---
-
-INSERT INTO `apoiador` (`id`, `nome`, `email`, `cpf`, `emprego`, `imagem`, `senha`) VALUES
-(8, 'Pedro Otavio', 'Pedro.otavio@gmail.com', '12312312310', 'Botanico', 'uploads/68ed26f35419b_2pac.jpg', '$2y$10$3wB4Stv9Y0yL.fLk4EdclOV71ivDxnLi8w4Su8koROBEmHei0zuo6'),
-(9, 'Leonardo', 'leomunizetec@gmail.com', '12145678952', 'admin', 'uploads/68f11f944de7b_eminem.jpg', '$2y$10$LeJjICS9hOSvHNgrwcsZSu4/.m0rKiRTbD9ou9A8v3ZZvrEAeil8C'),
-(10, 'Miguel', 'miguelnas190@gmail.com', '11111111111', 'admin', 'uploads/68f122815189a_snoop_dogg_photo_by_estevan_oriol_archive_photos_getty_455616412.jpg', '$2y$10$Il9PfNhpxOOpsrTtCicLKethKUlXZw73KnWArQt9iH2/eQtnB7.He');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `avaliacao`
 --
 
 CREATE TABLE `avaliacao` (
   `id` int UNSIGNED NOT NULL,
-  `apoiador_id` int DEFAULT NULL,
+  `usuario_id` int DEFAULT NULL,
   `planta_id` int DEFAULT NULL,
   `descricao` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -291,14 +266,14 @@ CREATE TABLE `planta` (
   `descricao` text,
   `cuidados` text,
   `video_link` varchar(255) DEFAULT NULL,
-  `apoiador_id` int DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `usuario_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `planta`
 --
 
-INSERT INTO `planta` (`id`, `nome_popular`, `nome_cientifico`, `descricao`, `cuidados`, `video_link`, `apoiador_id`) VALUES
+INSERT INTO `planta` (`id`, `nome_popular`, `nome_cientifico`, `descricao`, `cuidados`, `video_link`, `usuario_id`) VALUES
 (1, 'Costela-de-Adão', 'Monstera deliciosa', 'A costela-de-adão é uma planta da família das aráceas. Possui folhas grandes, cordiformes, penatífidas perfuradas, com longos pecíolos, flores aromáticas, em espádice comestível, branco-creme, com espata verde, e bagas amarelo-claras.', 'Luz indireta, regas regulares sem encharcar o solo, umidade adequada e substrato bem drenado.', 'https://www.youtube.com/embed/gMGSl1fqQ84?si=xveGqLfD6zexLJ2e', NULL),
 (24, 'Palmeira Imperial', 'Roystonea oleracea', 'As palmeiras são plantas perenes, arborescentes, tipicamente com um caule cilíndrico não ramificado do tipo estipe, atingindo grandes alturas, mas por vezes se apresentando como acaules (caule subterrâneo). Não são consideradas árvores porque todas as árvores possuem o crescimento do diâmetro do seu caule para a formação do tronco (crescimento secundário), que produz a madeira e tal não acontece com as palmeiras.\r\n\r\nA seiva de algumas espécies de arecáceas é tradicionalmente fermentada para produzir o vinho de palma, muito apreciado e conhecido em Moçambique com o nome de \"sura\" (onde, para além de ser bebido, é também utilizado como fermento na fabricação de pães e bolos). Em Angola, o vinho de palmeira é conhecido como \"marufo\". O buriti (Mauritia flexuosa) também é fermentado (entre outras formas de consumo), dando origem ao vinho de buriti, e o açaí (Euterpe oleracea) dá o vinho de açaí. No Brasil, a palmeira-imperial (Roystonea oleracea) plantada em 1809 por D. João VI, tornou-se o \"símbolo do império\" em meados do século XIX.', 'Para cuidar de uma palmeira-imperial (Roystonea oleracea), que necessita de sol pleno, solo fértil e bem drenado e rega regular, faça adubações periódicas com fertilizantes próprios ou orgânicos e pode apenas as folhas secas para não prejudicar a planta. Embora seja tolerante à seca quando adulta, a palmeira-imperial precisa de água suficiente durante os primeiros meses de crescimento para se estabelecer e crescer forte. ', 'https://www.youtube.com/embed/6oGZOoJVt4M?si=6A2qeoA1R2gTFdLx', NULL),
 (23, 'Samambaia', 'Tracheophyta', 'As samambaias, ou fetos, são vegetais vasculares membros do táxon das pteridófitas (que deixou de ter validade taxonômica e só é utilizado como uma denominação informal). Elas possuem tecidos vasculares (xilema e floema), folhas verdadeiras, se reproduzem através de esporos e não produzem sementes ou flores.', 'Para cuidar bem de uma samambaia, forneça luz indireta abundante, mantenha o solo constantemente úmido, mas nunca encharcado, borrifando água nas folhas para aumentar a umidade do ar. Realize adubações regulares com fertilizantes orgânicos, como húmus de minhoca, e faça a poda de folhas secas ou danificadas. ', 'https://www.youtube.com/embed/45j_-Sxp3gM?si=WVQ7VabU5I5aIZCq', NULL),
@@ -803,6 +778,55 @@ INSERT INTO `planta_estado` (`id_planta`, `id_estado`) VALUES
 (50, 26),
 (50, 27);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `planta_tags`
+--
+
+CREATE TABLE `planta_tags` (
+  `id` int NOT NULL,
+  `tag_id` int DEFAULT NULL,
+  `planta_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `id` int NOT NULL,
+  `nome_tag` varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int NOT NULL,
+  `nome` varchar(250) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `cpf` varchar(15) DEFAULT NULL,
+  `emprego` varchar(255) DEFAULT NULL,
+  `imagem` varchar(500) DEFAULT NULL,
+  `senha` varchar(100) DEFAULT NULL,
+  `tipo` enum('user','admin','apoiador') NOT NULL DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `cpf`, `emprego`, `imagem`, `senha`, `tipo`) VALUES
+(8, 'Pedro Otavio', 'Pedro.otavio@gmail.com', '12312312310', 'Botanico', 'uploads/68ed26f35419b_2pac.jpg', '$2y$10$LeJjICS9hOSvHNgrwcsZSu4/.m0rKiRTbD9ou9A8v3ZZvrEAeil8C', 'user'),
+(9, 'Leonardo', 'leomunizetec@gmail.com', '12145678952', 'admin', 'uploads/68f11f944de7b_eminem.jpg', '$2y$10$LeJjICS9hOSvHNgrwcsZSu4/.m0rKiRTbD9ou9A8v3ZZvrEAeil8C', 'admin'),
+(10, 'Miguel', 'miguelnas190@gmail.com', '11111111111', 'admin', 'uploads/68f122815189a_snoop_dogg_photo_by_estevan_oriol_archive_photos_getty_455616412.jpg', '$2y$10$Il9PfNhpxOOpsrTtCicLKethKUlXZw73KnWArQt9iH2/eQtnB7.He', 'admin');
+
 --
 -- Indexes for dumped tables
 --
@@ -815,17 +839,11 @@ ALTER TABLE `aplicacoes_biotec`
   ADD KEY `planta_id` (`planta_id`);
 
 --
--- Indexes for table `apoiador`
---
-ALTER TABLE `apoiador`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `avaliacao`
 --
 ALTER TABLE `avaliacao`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `apoiador_id` (`apoiador_id`),
+  ADD KEY `usuario_id` (`usuario_id`),
   ADD KEY `planta_id` (`planta_id`);
 
 --
@@ -870,6 +888,24 @@ ALTER TABLE `planta_estado`
   ADD KEY `id_estado` (`id_estado`);
 
 --
+-- Indexes for table `planta_tags`
+--
+ALTER TABLE `planta_tags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tags`
+--
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -880,22 +916,16 @@ ALTER TABLE `aplicacoes_biotec`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `apoiador`
---
-ALTER TABLE `apoiador`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
 -- AUTO_INCREMENT for table `avaliacao`
 --
 ALTER TABLE `avaliacao`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `caracteristicas`
 --
 ALTER TABLE `caracteristicas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `distribuicao_geografica`
@@ -913,13 +943,42 @@ ALTER TABLE `documentos`
 -- AUTO_INCREMENT for table `imagens`
 --
 ALTER TABLE `imagens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `planta`
 --
 ALTER TABLE `planta`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `planta_tags`
+--
+ALTER TABLE `planta_tags`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `avaliacao`
+--
+ALTER TABLE `avaliacao`
+  ADD CONSTRAINT `fk_avaliacao_planta` FOREIGN KEY (`planta_id`) REFERENCES `planta` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_avaliacao_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

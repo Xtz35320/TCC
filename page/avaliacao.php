@@ -1,6 +1,6 @@
 <?php
 include_once '../sql/conexao.php';
-include_once '../php/loginapoiador.php';
+include_once '../php/login.php';
 
 // Consulta das plantas
 $sql = "
@@ -24,7 +24,7 @@ $plantas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 $nome = $imagem = "";
 if (isset($_SESSION['apoiador_id'])) {
   $id = $_SESSION['apoiador_id'];
-  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
   $result_apoiador = $conn->query($sql_apoiador);
   if ($result_apoiador && $result_apoiador->num_rows > 0) {
     $row = $result_apoiador->fetch_assoc();
@@ -50,14 +50,14 @@ if (isset($_SESSION['apoiador_id'])) {
     <ul class="menu-list">
       <li><a href="index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
-      <?php if (isset($_SESSION['apoiador_id'])): ?>
+      <?php if (isset($_SESSION['apoiador_id']) && ($_SESSION['apoiador_tipo'] == 'apoiador' || $_SESSION['apoiador_tipo'] == 'admin')): ?>
         <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <?php endif; ?>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
-        <li><a href="loginapoiador.php">Nos apoie!</a></li>
+        <li><a href="login.php">Nos apoie!</a></li>
       <?php endif; ?>
-      <li><a href="avaliacao.php">Avalie aqui!</a></li>
+      <li><a href="./identificar/identificar.php">indentificar</a></li>
     </ul>
 
     <?php if ($nome): ?>

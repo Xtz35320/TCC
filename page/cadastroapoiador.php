@@ -32,6 +32,7 @@
         $emprego = $_POST['emprego'] ?? '';
         $senha = $_POST['senha'] ?? '';
         $imagem = '';
+        $tipo = 3;
 
         // Upload da imagem
         if (!empty($_FILES['imagem']['name'])) {
@@ -51,9 +52,9 @@
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
 
-        $sql = "INSERT INTO apoiador (nome, email, cpf, emprego, imagem, senha) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO usuarios (nome, email, cpf, imagem, senha, tipo) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssss", $nome, $email, $cpf, $emprego, $imagem, $senhaHash);
+        $stmt->bind_param("ssssss", $nome, $email, $cpf, $imagem, $senhaHash, $tipo);
 
         if ($stmt->execute()) {
           echo "<p style='color:green; text-align:center;'>Apoiador cadastrado com sucesso!</p>";
@@ -70,7 +71,7 @@
         <label>Nome: <input type="text" name="nome" required></label><br>
         <label>Email: <input type="email" name="email" required></label><br>
         <label>CPF: <input type="text" name="cpf" required  maxlength="11"></label><br>
-        <label>Emprego: <input type="text" name="emprego"></label><br>
+        <label>Formação: <input type="text" name="emprego"></label><br>
         <label>Senha: <input type="password" name="senha" minlength="8" required></label><br>
         <label>Imagem (opcional): <input type="file" name="imagem" accept="image/*"></label><br>
         <button type="submit" class="btn_cadastro" style="width:100%;">Cadastrar</button>
@@ -78,7 +79,7 @@
 
       <hr>
       <p style="text-align:center; margin-top:10px;">
-        Já é apoiador? <a href="loginapoiador.php" style="color:#1c7924;">Faça login</a>
+        Já é apoiador? <a href="login.php" style="color:#1c7924;">Faça login</a>
       </p>
     </div>
   </main>

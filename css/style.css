@@ -834,6 +834,7 @@ hr {
   pointer-events: none;
 }
 
+
 /* =========================
     RODAPÉ
    ========================= */
@@ -1378,3 +1379,76 @@ svg {
    ========================= */
 
    
+
+   /* =========================
+   TAG FILTER
+   ========================= */
+
+.tag-filter-container {
+  margin-right: 15px;
+}
+
+.tag-form {
+  display: flex;
+  align-items: center;
+}
+
+.tag-select {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  padding-right: 30px;
+}
+
+.tag-select:hover {
+  border-color: #1c7924;
+  background-color: #2a2a2a;
+}
+
+.tag-select:focus {
+  outline: none;
+  border-color: #f39c12;
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2);
+}
+
+.tag-select option {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  padding: 8px;
+}
+
+/* Para melhorar a responsividade no menu */
+@media screen and (max-width: 800px) {
+  .tag-filter-container {
+    margin: 10px 0;
+    width: 100%;
+  }
+  
+  .tag-select {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  #menu {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px;
+  }
+}
+
+/* Estilo para quando há filtro ativo */
+.tag-select.has-filter {
+  border-color: #f39c12;
+  background-color: #2a1e00;
+}

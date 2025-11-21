@@ -18,7 +18,6 @@ $result = $conn->query($sql);
 
 $plantas = [];
 if ($result && $result->num_rows > 0) {
-  // Pega tudo como array associativo para usar foreach
   $plantas = $result->fetch_all(MYSQLI_ASSOC);
 }
 
@@ -28,12 +27,12 @@ $result_img = $conn->query($sql_img);
 $imagem = null;
 
 if ($result_img && $result_img->num_rows > 0) {
-  $imagem = $result_img->fetch_assoc(); // pega só a primeira linha
+  $imagem = $result_img->fetch_assoc(); 
 }
 
 
 
-include_once '../php/loginapoiador.php';
+include_once '../php/login.php';
 
 if (!isset($_SESSION['apoiador_id'])) {
 
@@ -41,9 +40,9 @@ if (!isset($_SESSION['apoiador_id'])) {
 } else {
 
   $id = $_SESSION['apoiador_id'];
+  $tipo = $_SESSION['apoiador_tipo'];
 
-
-  $sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+  $sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
   $result_apoiador = $conn->query($sql_apoiador);
 
   $nome = "";
@@ -74,21 +73,21 @@ if (!isset($_SESSION['apoiador_id'])) {
 
   <nav id="menu">
     <ul class="menu-list">
-      <li><a href="#" class="active">Início</a></li>
       <li><a href="sobre.php">Sobre</a></li>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
-      <?php else: ?>
+      <?php if (isset($_SESSION['apoiador_id']) && ($_SESSION['apoiador_tipo'] == 'apoiador' || $_SESSION['apoiador_tipo'] == 'admin')): ?>
         <li><a href="cadastro.php">Cadastro de plantas</a></li>
+      <?php else: ?>
       <?php endif; ?>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
       <?php else: ?>
         <li><a href="avaliacao.php">Avalie aqui!</a></li>
       <?php endif; ?>
+      <li><a href="./identificar/identificar.php">Identifique</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
-        <li><a href="loginapoiador.php">Nos apoie!</a></li>
-      <?php else: ?>
-      <?php endif; ?>
+        <li><a href="login.php">Login</a></li>
+        <?php else: ?>
+          <?php endif; ?>
     </ul>
 
 
@@ -96,7 +95,7 @@ if (!isset($_SESSION['apoiador_id'])) {
     <?php else: ?>
       <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
         <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-        <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+        <h5 style="margin:0;  display:inline-block; white-space:nowrap;"><?php echo htmlspecialchars($nome) ?></h5>
       </a>
     <?php endif; ?>
 
@@ -140,7 +139,7 @@ if (!isset($_SESSION['apoiador_id'])) {
       <h2>Ajude a manter o Botan Mind vivo!</h2>
       <p>Nosso site é feito com dedicação para compartilhar conhecimento sobre o mundo das plantas.
         Seu apoio é fundamental para continuarmos crescendo.</p>
-      <a href="./loginapoiador.php">
+      <a href="./cadastroapoiador.php">
         <button class="btn_cadastro"> Junte-se a nós</button>
       </a>
     </div>

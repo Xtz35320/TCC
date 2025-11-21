@@ -1,6 +1,6 @@
 <?php
 include_once '../sql/conexao.php';
-include_once '../php/loginapoiador.php';
+include_once '../php/login.php';
 
 if (isset($_POST['logout'])) {
     unset($_SESSION['apoiador_id']);
@@ -16,12 +16,20 @@ if (!isset($_SESSION['apoiador_id'])) {
 } else {
     $id = $_SESSION['apoiador_id'];
 
-    $sql_apoiador = "SELECT nome, imagem, cpf, emprego, email FROM apoiador WHERE id = $id";
+    $sql_apoiador = "SELECT id, nome, imagem, cpf, emprego, email FROM usuarios WHERE id = $id";
     $result_apoiador = $conn->query($sql_apoiador);
 
-    $nome = $imagem = $cpf = $emprego = $email = "";
+    $usuario_id =  "";
+    $nome = "";
+    $imagem =  "";
+    $cpf =  "";
+    $emprego =  "";
+    $email = "";
+
+
     if ($result_apoiador->num_rows > 0) {
         $row = $result_apoiador->fetch_assoc();
+        $usuario_id = $row['id'];
         $nome = $row['nome'];
         $imagem = $row['imagem'];
         $cpf = $row['cpf'];
@@ -36,6 +44,26 @@ if (!isset($_SESSION['apoiador_id'])) {
         return substr($cpf, 0, 3) . str_repeat('*', 6) . substr($cpf, -2);
     }
 }
+
+
+$plantas = [];
+
+$sql_planta = "SELECT p.id, p.nome_popular, p.descricao, 
+               MIN(i.caminho_imagem) AS caminho_imagem
+        FROM planta p
+        LEFT JOIN imagens i ON i.planta_id = p.id
+        WHERE p.usuario_id = $usuario_id
+        GROUP BY p.id, p.nome_popular, p.descricao";
+
+$result_planta = $conn->query($sql_planta);
+
+if ($result_planta->num_rows > 0) {
+    while ($row = $result_planta->fetch_assoc()) {
+        $plantas[] = $row;
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -60,6 +88,13 @@ if (!isset($_SESSION['apoiador_id'])) {
             <?php if (!isset($_SESSION['apoiador_id'])): ?>
             <?php else: ?>
             <?php endif; ?>
+            <?php if (isset($_SESSION['apoiador_id'])): ?>
+                <li><a href="avaliacao.php">Avalie aqui!</a></li>
+            <?php endif; ?>
+            <li><a href="./identificar/identificar.php">Identifique</a></li>
+            <?php if (!isset($_SESSION['apoiador_id'])): ?>
+                <li><a href="login.php">Nos apoie!</a></li>
+            <?php endif; ?>
         </ul>
     </nav>
 
@@ -69,7 +104,7 @@ if (!isset($_SESSION['apoiador_id'])) {
             <div class="perfil-info">
                 <h2><?php echo htmlspecialchars($nome ?: 'Usuário não identificado'); ?></h2>
                 <p><strong>CPF:</strong> <?php echo htmlspecialchars(formatarCPF($cpf)); ?></p>
-                <p><strong>Emprego:</strong> <?php echo htmlspecialchars($emprego); ?></p>
+                <p><strong>Formação:</strong> <?php echo htmlspecialchars($emprego); ?></p>
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
             </div>
 
@@ -82,7 +117,28 @@ if (!isset($_SESSION['apoiador_id'])) {
                     </form> -->
             </div>
         </div>
+
+
     </section>
+<main class="recentes-container">
+    <h2 class="titulo-recentes">Plantas cadastradas pelo usuário</h2>
+    <div class="recentes-grid">
+      <?php if (count($plantas) > 0): ?>
+        <?php foreach ($plantas as $planta): ?>
+          <a href="template_page.php?id=<?= htmlspecialchars($planta['id']) ?>" class="recentes-card">
+            <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="recentes-card-img">
+            <div class="recentes-card-content">
+              <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
+              <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
+              <span class="read-more-btn">Leia Mais</span>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>Nenhuma planta encontrada.</p>
+      <?php endif; ?>
+    </div>
+  </main>
 
     <footer class="footer">
         <div class="rodape">

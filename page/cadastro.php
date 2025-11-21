@@ -1,10 +1,10 @@
 <?php
 include_once '../sql/conexao.php';
-include_once '../php/loginapoiador.php';
+include_once '../php/login.php';
 
 $id = $_SESSION['apoiador_id'];
 
-$sql_apoiador = "SELECT nome, imagem FROM apoiador WHERE id = $id";
+$sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
 $result_apoiador = $conn->query($sql_apoiador);
 
 $nome = "";
@@ -47,8 +47,8 @@ if ($result_apoiador->num_rows > 0) {
     <ul class="menu-list">
       <li><a href="index.php">Início</a></li>
       <li><a href="#about">Sobre</a></li>
-      <li><a href="cadastro.php">Cadastro de plantas</a></li>
       <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+      <li><a href="./identificar/identificar.php">indentificar</a></li>
       <?php if (!isset($_SESSION['apoiador_id'])): ?>
         <?php else: ?>
           <li><a href="avaliacao.php">Avalie aqui!</a></li>
@@ -59,7 +59,7 @@ if ($result_apoiador->num_rows > 0) {
     <?php else: ?>
       <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
         <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-        <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+        <h5 style="margin:0;  display:inline-block; white-space:nowrap;"><?php echo htmlspecialchars($nome) ?></h5>
       </a>
     <?php endif; ?>
 
