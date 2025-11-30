@@ -1,10 +1,16 @@
 <?php
-// Habilitar exibição de erros para debug (remover em produção)
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Configurações de conexão com o banco de dados
-include_once "../sql/conexao.php"; // Aqui assumimos que a variável $conn é a conexão MySQLi.
+include_once "../sql/conexao.php";
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../page/login.php");
+    exit;
+}
+
+$usuario_id = $_SESSION['usuario_id'];
 
 $uf_to_id = [
     'AC' => 1, 'AL' => 2, 'AM' => 4, 'AP' => 3, 'BA' => 5, 
@@ -14,6 +20,7 @@ $uf_to_id = [
     'RO' => 22, 'RR' => 23, 'RS' => 21, 'SC' => 24, 'SE' => 26, 
     'SP' => 25, 'TO' => 27
 ];
+
 
 try {
     // Verificar se a conexão foi estabelecida com sucesso
@@ -30,7 +37,7 @@ try {
         $descricao = filter_input(INPUT_POST, 'descricao');
         $cuidados = filter_input(INPUT_POST, 'cuidados');
         $video_link = filter_input(INPUT_POST, 'video_link', FILTER_SANITIZE_URL);
-        
+        $usuario_id = $_SESSION['usuario_id'];
         // Dados taxonômicos
         $reino = filter_input(INPUT_POST, 'reino');
         $divisao = filter_input(INPUT_POST, 'divisao');
@@ -62,9 +69,9 @@ try {
         $conn->begin_transaction();
         
         // 1. Inserir dados básicos da planta
-        $stmt = $conn->prepare("INSERT INTO planta (nome_popular, nome_cientifico, descricao, cuidados, video_link) 
-                               VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $nome_popular, $nome_cientifico, $descricao, $cuidados, $video_link);
+        $stmt = $conn->prepare("INSERT INTO planta (nome_popular, nome_cientifico, descricao, cuidados, video_link, usuario_id) 
+                               VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssi", $nome_popular, $nome_cientifico, $descricao, $cuidados, $video_link, $usuario_id);
         $stmt->execute();
         
         $planta_id = $stmt->insert_id;

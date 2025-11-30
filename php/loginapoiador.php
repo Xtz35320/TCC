@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Preencha todos os campos.');</script>";
     } else {
         // Prepara a consulta para pegar dados do banco
-        $stmt = $conn->prepare("SELECT id, nome, senha FROM apoiador WHERE email = ?");
+        $stmt = $conn->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?");
         $stmt->bind_param('s', $email); // Previne SQL Injection
         $stmt->execute();
         $resultado = $stmt->get_result();

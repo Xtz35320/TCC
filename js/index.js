@@ -8,10 +8,7 @@ function openPdfModal(pdfUrl) {
 
 const span = document.getElementsByClassName("close")[0];
 
-span.onclick = function() {
-  modal.style.display = "none";
-  modalIframe.src = "";
-}
+
 
 window.onclick = function(event) {
   if (event.target == modal) {
@@ -64,14 +61,19 @@ let indice = 0;
     imagens.style.transform = `translateX(-${indice * 400}px)`;
   }
 
-  window.addEventListener('scroll', function() {
-    const menu = document.getElementById('menu');
-    if (window.scrollY < 270) {
-      menu.classList.add('topo'); 
+  window.addEventListener('scroll', function () {
+  const ids = ['menu', 'active-menu'];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    if (window.scrollY < 1) {
+      el.classList.add('topo');
     } else {
-      menu.classList.remove('topo'); 
+      el.classList.remove('topo');
     }
   });
+});
 
-
-  window.dispatchEvent(new Event('scroll'));
+window.dispatchEvent(new Event('scroll'));

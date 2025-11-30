@@ -1,20 +1,85 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+
+  $nome = "";
+} else {
+
+  $id = $_SESSION['usuario_id'];
+
+
+  $sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
+
+  $nome = "";
+  $imagem = "";
+  if ($result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro de Apoiador | Botan Mind</title>
+  <title>Cadastro | Botan Mind</title>
   <link rel="stylesheet" href="../css/style.css?v=1" />
+  <link rel="shortcut icon"
+    href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png"
+    type="image/png">
 </head>
 
 <body>
   <nav id="menu">
-    <ul class="menu-list">
-      <li><a href="./index.php">Início</a></li>
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="./ListaPlantas.php">Lista de plantas</a></li>
-    </ul>
+
+
+    <div class="menu-center">
+      <ul class="menu-list">
+        <li><a href="index.php">Início</a></li>
+
+
+        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "apoiador"): ?>
+          <li><a href="cadastro.php">Cadastro de plantas</a></li>
+        <?php else: ?>
+        <?php endif; ?>
+
+        <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+
+        <li><a href="./identificar/identificar.php">Identificar planta</a></li>
+
+        <?php if (!isset($_SESSION['usuario_id'])): ?>
+        <?php else: ?>
+          <li><a href="avaliacao.php">Avalie aqui!</a></li>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "admin"): ?>
+          <li><a href="./admin/admin.php">Painel admin</a></li>
+        <?php else: ?>
+        <?php endif; ?>
+
+      </ul>
+    </div>
+
+
+    <!-- LADO DIREITO (Nos apoie / Perfil) -->
+    <div class="menu-right">
+      <?php if (!isset($_SESSION['usuario_id'])): ?>
+        <a href="login.php" class="apoie-btn">Login</a>
+      <?php else: ?>
+        <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
+          <img src="<?php echo htmlspecialchars($imagem) ?>"
+            style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+          <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+        </a>
+      <?php endif; ?>
+    </div>
+
   </nav>
 
 
@@ -29,7 +94,6 @@
         $nome = $_POST['nome'] ?? '';
         $email = $_POST['email'] ?? '';
         $cpf = $_POST['cpf'] ?? '';
-        $emprego = $_POST['emprego'] ?? '';
         $senha = $_POST['senha'] ?? '';
         $imagem = '';
 
@@ -51,12 +115,12 @@
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
 
-        $sql = "INSERT INTO usuarios (nome, email, cpf, emprego, imagem, senha) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO usuarios (nome, email, cpf, imagem, senha) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssss", $nome, $email, $cpf, $emprego, $imagem, $senhaHash);
+        $stmt->bind_param("sssss", $nome, $email, $cpf, $imagem, $senhaHash);
 
         if ($stmt->execute()) {
-          echo "<p style='color:green; text-align:center;'>Apoiador cadastrado com sucesso!</p>";
+          echo "<p style='color:green; text-align:center;'>Usuário cadastrado com sucesso!</p>";
         } else {
           echo "<p style='color:red; text-align:center;'>Erro ao cadastrar: " . $stmt->error . "</p>";
         }
@@ -69,8 +133,7 @@
       <form class="form-login" action="" method="POST" enctype="multipart/form-data">
         <label>Nome: <input type="text" name="nome" required></label><br>
         <label>Email: <input type="email" name="email" required></label><br>
-        <label>CPF: <input type="text" name="cpf" required  maxlength="11"></label><br>
-        <label>Emprego: <input type="text" name="emprego"></label><br>
+        <label>CPF: <input type="text" name="cpf" required maxlength="11"></label><br>
         <label>Senha: <input type="password" name="senha" required></label><br>
         <label>Imagem (opcional): <input type="file" name="imagem" accept="image/*"></label><br>
         <button type="submit" class="btn_cadastro" style="width:100%;">Cadastrar</button>

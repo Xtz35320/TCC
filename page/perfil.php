@@ -1,112 +1,200 @@
 <?php
 include_once '../sql/conexao.php';
-include_once '../php/login.php';
+session_start();
 
+/* ================================
+      CONFIGURAÇÃO DE PAGINAÇÃO
+   ================================ */
+$plantas_por_pagina = 12;
+$pagina_atual = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+$offset = ($pagina_atual - 1) * $plantas_por_pagina;
+
+$busca = isset($_GET['q']) ? trim($_GET['q']) : "";
+$tagFiltro = isset($_GET['tag']) ? (int) $_GET['tag'] : 0;
+
+/* ================================
+      FILTRO DE PLANTAS (BUSCA)
+   ================================ */
+if ($busca !== "" || $tagFiltro > 0) {
+    $condicoes = [];
+
+    if ($busca !== "") {
+        $busca_sql = $conn->real_escape_string($busca);
+        $condicoes[] = "p.nome_popular LIKE '%$busca_sql%'";
+    }
+
+    if ($tagFiltro > 0) {
+        $condicoes[] = "p.id IN (
+            SELECT planta_id FROM planta_tags WHERE tag_id = $tagFiltro
+        )";
+    }
+
+    $where = implode(" AND ", $condicoes);
+
+    $sql = "
+        SELECT p.id, p.nome_popular, p.descricao,
+               (SELECT caminho_imagem FROM imagens WHERE planta_id = p.id LIMIT 1) AS caminho_imagem
+        FROM planta p
+        WHERE $where
+        ORDER BY p.nome_popular ASC
+        LIMIT $plantas_por_pagina OFFSET $offset
+    ";
+
+    $sql_total = "SELECT COUNT(*) AS total FROM planta p WHERE $where";
+} else {
+    $sql = "
+        SELECT p.id, p.nome_popular, p.descricao,
+               (SELECT caminho_imagem FROM imagens WHERE planta_id = p.id LIMIT 1) AS caminho_imagem
+        FROM planta p
+        ORDER BY p.nome_popular ASC
+        LIMIT $plantas_por_pagina OFFSET $offset
+    ";
+
+    $sql_total = "SELECT COUNT(*) AS total FROM planta";
+}
+
+$result = $conn->query($sql);
+$plantas = $result && $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
+$total_result = $conn->query($sql_total);
+$total_plantas = $total_result ? $total_result->fetch_assoc()['total'] : 0;
+$total_paginas = ceil($total_plantas / $plantas_por_pagina);
+
+/* ================================
+      LOGOUT
+   ================================ */
 if (isset($_POST['logout'])) {
-    unset($_SESSION['apoiador_id']);
+    unset($_SESSION['usuario_id']);
+    unset($_SESSION['usuario_nome']);
+    unset($_SESSION['usuario_tipo']);
+    session_destroy();
     header("Location: index.php");
     exit;
 }
 
-
-
-
-if (!isset($_SESSION['apoiador_id'])) {
-    $nome = $imagem = $cpf = $emprego = $email = "";
+/* ================================
+      BUSCAR DADOS DO USUÁRIO
+   ================================ */
+if (!isset($_SESSION['usuario_id'])) {
+    $usuario_id = null;
+    $nome = $imagem = $cpf = $email = "";
 } else {
-    $id = $_SESSION['apoiador_id'];
-    $tipo = $_SESSION['apoiador_tipo'];
+    $id = $_SESSION['usuario_id'];
 
-    $sql_apoiador = "SELECT id, nome, imagem, cpf, emprego, email FROM usuarios WHERE id = $id";
-    $result_apoiador = $conn->query($sql_apoiador);
+    $sql_user = "SELECT id, nome, imagem, cpf, email FROM usuarios WHERE id = ?";
+    $stmt = $conn->prepare($sql_user);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result_user = $stmt->get_result();
 
-    $usuario_id =  "";
-    $nome = "";
-    $imagem =  "";
-    $cpf =  "";
-    $emprego =  "";
-    $email = "";
-
-
-    if ($result_apoiador->num_rows > 0) {
-        $row = $result_apoiador->fetch_assoc();
+    if ($result_user->num_rows > 0) {
+        $row = $result_user->fetch_assoc();
         $usuario_id = $row['id'];
         $nome = $row['nome'];
         $imagem = $row['imagem'];
         $cpf = $row['cpf'];
-        $emprego = $row['emprego'];
         $email = $row['email'];
+    } else {
+        $usuario_id = null;
     }
 
-    function formatarCPF($cpf)
-    {
-        $cpf = preg_replace('/\D/', '', (string)$cpf);
-        if (strlen($cpf) !== 11) return '';
-        return substr($cpf, 0, 3) . str_repeat('*', 6) . substr($cpf, -2);
-    }
+    $stmt->close();
 }
 
+/* ================================
+      FORMATAR CPF
+   ================================ */
+function formatarCPF($cpf)
+{
+    $cpf = preg_replace('/\D/', '', (string)$cpf);
+    if (strlen($cpf) !== 11) return '';
+    return substr($cpf, 0, 3) . str_repeat('*', 6) . substr($cpf, -2);
+}
 
+/* ================================
+      BUSCAR PLANTAS DO USUÁRIO
+   ================================ */
 $plantas = [];
 
-$sql_planta = "SELECT p.id, p.nome_popular, p.descricao, 
-               MIN(i.caminho_imagem) AS caminho_imagem
+if (isset($usuario_id)) {
+    $sql_planta = "
+        SELECT p.id, p.nome_popular, p.descricao, MIN(i.caminho_imagem) AS caminho_imagem
         FROM planta p
         LEFT JOIN imagens i ON i.planta_id = p.id
-        WHERE p.usuario_id = $usuario_id
-        GROUP BY p.id, p.nome_popular, p.descricao";
+        WHERE p.usuario_id = ?
+        GROUP BY p.id, p.nome_popular, p.descricao
+    ";
 
-$result_planta = $conn->query($sql_planta);
+    $stmt2 = $conn->prepare($sql_planta);
+    $stmt2->bind_param("i", $usuario_id);
+    $stmt2->execute();
+    $result_planta = $stmt2->get_result();
 
-if ($result_planta->num_rows > 0) {
     while ($row = $result_planta->fetch_assoc()) {
         $plantas[] = $row;
     }
+
+    $stmt2->close();
 }
 
+/* ================================
+      BUSCAR FORMAÇÕES (CORRIGIDO)
+   ================================ */
+$formacoes = [];
+$sql_form = $conn->prepare("SELECT * FROM formacoes WHERE usuario_id = ?");
+$sql_form->bind_param("i", $usuario_id);
+$sql_form->execute();
+$res_form = $sql_form->get_result();
 
+while ($f = $res_form->fetch_assoc()) {
+    $formacoes[] = $f;
+}
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Botan Mind | Perfil</title>
-    <link rel="stylesheet" href="../css/style.css?v=<?php echo filemtime('../css/style.css'); ?>" />
-    <link rel="shortcut icon" href="https://images.vexels.com/media/users/3/262042/isolated/preview/69326c8749e7a0bc882fbbe2a8e5fa50-icone-botanico-de-folha.png" type="image/png">
+    <link rel="stylesheet" href="../css/style.css?v=<?php echo time(); ?>">
 </head>
 
 <body>
+
     <nav id="menu">
-        <ul class="menu-list">
-            <li><a href="index.php">Início</a></li>
-            <li><a href="#about">Sobre</a></li>
-            <?php if (isset($_SESSION['apoiador_id']) && ($_SESSION['apoiador_tipo'] == 'apoiador' || $_SESSION['apoiador_tipo'] == 'admin')): ?>
-                <li><a href="cadastro.php">Cadastro de plantas</a></li>
-            <?php else: ?>
-            <?php endif; ?>
-            <li><a href="ListaPlantas.php">Lista de plantas</a></li>
-            <?php if (!isset($_SESSION['apoiador_id'])): ?>
-            <?php else: ?>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['apoiador_id'])): ?>
-                <li><a href="avaliacao.php">Avalie aqui!</a></li>
-            <?php endif; ?>
-            <li><a href="./identificar/identificar.php">Identifique</a></li>
-            <?php if (!isset($_SESSION['apoiador_id'])): ?>
-                <li><a href="login.php">Nos apoie!</a></li>
-            <?php endif; ?>
-        </ul>
+        <div class="menu-center">
+            <ul class="menu-list">
+                <li><a href="index.php">Início</a></li>
+
+                <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "apoiador"): ?>
+                    <li><a href="cadastro.php">Cadastro de plantas</a></li>
+                <?php endif; ?>
+
+                <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+                <li><a href="./identificar/identificar.php">Identificar planta</a></li>
+
+                <?php if (isset($_SESSION['usuario_id'])): ?>
+                    <li><a href="avaliacao.php">Avalie aqui!</a></li>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "admin"): ?>
+                    <li><a href="./admin/admin.php">Painel admin</a></li>
+                <?php endif; ?>
+            </ul>
+        </div>
     </nav>
 
     <section class="perfil-container">
         <div class="perfil-card">
-            <img src="<?php echo htmlspecialchars($imagem ?: '../img/default-user.png'); ?>" alt="Foto de perfil" class="perfil-foto">
+            <img src="<?php echo htmlspecialchars($imagem ?: '../img/default-user.png'); ?>" class="perfil-foto">
+
             <div class="perfil-info">
-                <h2><?php echo htmlspecialchars($nome ?: 'Usuário não identificado'); ?></h2>
-                <p><strong>CPF:</strong> <?php echo htmlspecialchars(formatarCPF($cpf)); ?></p>
-                <p><strong>Formação:</strong> <?php echo htmlspecialchars($emprego); ?></p>
+                <h2><?php echo htmlspecialchars($nome); ?></h2>
+                <p><strong>CPF:</strong> <?php echo formatarCPF($cpf); ?></p>
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
             </div>
 
@@ -114,139 +202,96 @@ if ($result_planta->num_rows > 0) {
                 <form method="post">
                     <button class="btn_deslogar" type="submit" name="logout">Sair</button>
                 </form>
-                <!-- <form method="post">
-                        <button class="btn_delete" type="submit" name="delete">Excluir</button>
-                    </form> -->
             </div>
         </div>
 
+
+        <!-- ====================== -->
+        <!--       FORMAÇÕES        -->
+        <!-- ====================== -->
+
+        <div class="formacao-container">
+            <h3 style="margin-top:20px;">Formações</h3>
+
+            <?php if (count($formacoes) === 0): ?>
+                <p>Nenhuma formação cadastrada.</p>
+            <?php endif; ?>
+
+            <?php foreach ($formacoes as $f): ?>
+                <div class="formacao-card">
+                    <h4 style="color: #246b37;"><?= htmlspecialchars($f['curso']) ?></h4>
+
+                    <p><b>Instituição:</b> <?= htmlspecialchars($f['instituicao']) ?></p>
+
+                    <?php if (!empty($f['ano_conclusao'])): ?>
+                        <p><b>Ano de conclusão:</b> <?= htmlspecialchars($f['ano_conclusao']) ?></p>
+                    <?php endif; ?>
+
+                    <a class="btn-del"
+                        href="../php/formacao/excluir_formacao.php?id=<?= $f['id'] ?>"
+                        onclick="return confirm('Deseja excluir esta formação?');">
+                        Excluir
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
     </section>
-    <?php if (isset($_SESSION['apoiador_id']) && ($_SESSION['apoiador_tipo'] == 'apoiador' || $_SESSION['apoiador_tipo'] == 'admin')): ?>
-    <main class="recentes-container">
-        <h2 class="titulo-recentes">Plantas cadastradas pelo usuário</h2>
-        <div class="recentes-grid">
-            <?php if (count($plantas) > 0): ?>
-                <?php foreach ($plantas as $planta): ?>
-                    <a href="template_page.php?id=<?= htmlspecialchars($planta['id']) ?>" class="recentes-card">
-                        <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" alt="Planta <?= htmlspecialchars($planta['nome_popular']) ?>" class="recentes-card-img">
-                        <div class="recentes-card-content">
-                            <h3 class="titulo"><?= htmlspecialchars($planta['nome_popular']) ?></h3>
-                            <p class="texto" style="display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars($planta['descricao']) ?></p>
-                            <span class="read-more-btn">Leia Mais</span>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Nenhuma planta encontrada.</p>
+
+
+    <?php if (isset($_SESSION['usuario_id']) && ($_SESSION['usuario_tipo'] === 'apoiador' || $_SESSION['usuario_tipo'] === 'admin')): ?>
+
+        <main class="listar-container">
+
+            <h2 class="titulo-listar" style="margin-top: 100px;">Plantas publicadas</h2>
+
+            <div class="listar-grid">
+                <?php if (count($plantas) > 0): ?>
+                    <?php foreach ($plantas as $planta): ?>
+                        <a href="template_page.php?id=<?= $planta['id'] ?>" class="listar-card">
+                            <img src="<?= htmlspecialchars($planta['caminho_imagem']) ?>" class="listar-card-img">
+                            <div class="listar-card-content">
+                                <h3><?= htmlspecialchars($planta['nome_popular']) ?></h3>
+                                <p class="texto"
+                                    style="display:-webkit-box; -webkit-line-clamp:6; -webkit-box-orient:vertical; overflow:hidden;">
+                                    <?= htmlspecialchars($planta['descricao']) ?>
+                                </p>
+                                <span class="read-more-btn">Leia Mais</span>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Nenhuma planta cadastrada.</p>
+                <?php endif; ?>
+            </div>
+
+            <?php if ($total_paginas > 1): ?>
+                <div class="paginacao">
+                    <?php if ($pagina_atual > 1): ?>
+                        <a href="?pagina=<?= $pagina_atual - 1 ?>">« Anterior</a>
+                    <?php endif; ?>
+
+                    <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+                        <a href="?pagina=<?= $i ?>" class="<?= $i === $pagina_atual ? 'ativo' : '' ?>">
+                            <?= $i ?>
+                        </a>
+                    <?php endfor; ?>
+
+                    <?php if ($pagina_atual < $total_paginas): ?>
+                        <a href="?pagina=<?= $pagina_atual + 1 ?>">Próxima »</a>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
-        </div>
-    </main>
+
+        </main>
+
     <?php endif; ?>
 
-    <footer class="footer">
-        <div class="rodape">
-            <div class="logo">
-                <img src="../assets/img/logo.png" class="logo-img" alt="">
-            </div>
-            <div class="paginas-rodape">
-                <a href="index.php">
-                    <h5>Início</h5>
-                </a>
-                <a href="ListaPlantas.php">
-                    <h5>Lista de planta</h5>
-                </a>
-                <a href="sobre.php">
-                    <h5>Sobre</h5>
-                </a>
-                <a href="contato.php">
-                    <h5>Contato</h5>
-                </a>
-            </div>
-            <div class="email">
-                <form id="form-email" style="display:flex; flex-direction:column; gap:4px; width:240px;">
-
-                    <input type="text" name="nome" placeholder="Nome"
-                        required
-                        style="padding:3px 5px; font-size:12px; height:24px;">
-
-                    <input type="email" name="email" placeholder="E-mail"
-                        required
-                        style="padding:3px 5px; font-size:12px; height:24px;">
-
-                    <input name="mensagem" placeholder="Mensagem" required
-                        style="padding:3px 5px; font-size:12px; height:25px; resize:none;"></input>
-
-                    <button id="btn-enviar" type="submit"
-                        style="padding:4px; background:#196901; color:#fff; border:none; cursor:pointer; font-size:12px; height:26px;">
-                        Enviar
-                    </button>
-
-                    <p id="status-msg" style="font-size:11px; margin:0;"></p>
-                </form>
-            </div>
-
-
-            <div class="redes-sociais">
-
-                <a href="https://www.instagram.com/botanmind9">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
-                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334" />
-                    </svg>
-                </a>
-
-                <a href="https://www.facebook.com/">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
-                    </svg>
-                </a>
-
-                <a href="https://x.com/BotanMind9">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
-                        <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
-                    </svg>
-                </a>
-
-            </div>
-        </div>
-        <p>© 2025 Plantcare. Todos os direitos reservados.</p>
-
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            emailjs.init("wucfVf2nDk31TnkRP");
-
-            const form = document.getElementById("form-email");
-            const statusMsg = document.getElementById("status-msg");
-            const btn = document.getElementById("btn-enviar");
-
-            form.addEventListener("submit", function(e) {
-                e.preventDefault();
-
-                btn.disabled = true;
-                btn.style.opacity = "0.6";
-                statusMsg.textContent = "Enviando...";
-
-                emailjs.sendForm("service_05rwahm", "template_gvh46zt", form)
-                    .then(function(response) {
-                        statusMsg.textContent = "Mensagem enviada com sucesso.";
-                        form.reset();
-                    }, function(error) {
-                        console.error("EmailJS error:", error);
-                        statusMsg.textContent = "Erro ao enviar. Tente novamente.";
-                    })
-                    .finally(function() {
-                        btn.disabled = false;
-                        btn.style.opacity = "1";
-                    });
-            });
-        });
-    </script>
-
-    <script src="../js/index.js?v=1"></script>
 </body>
+<style>
+    body {
+        padding-top: 100px;
+    }
+</style>
 
 </html>

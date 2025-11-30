@@ -1,16 +1,50 @@
 <?php
 include_once '../sql/conexao.php';
-include_once '../php/login.php';
 
-$id = $_SESSION['apoiador_id'];
+session_start();
 
-$sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
-$result_apoiador = $conn->query($sql_apoiador);
+if (!isset($_SESSION['usuario_id'])) {
+
+  $nome = "";
+} else {
+
+  $id = $_SESSION['usuario_id'];
+
+
+  $sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
+
+  $nome = "";
+  $imagem = "";
+  if ($result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
+}
+
+if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'apoiador') {
+  header("Location: index.php");
+  exit;
+}
+
+$id = $_SESSION['usuario_id'];
+
+$sql_tipo = "SELECT tipo FROM usuarios WHERE id = $id";
+$sql_status = "SELECT status_aprovacao FROM usuarios WHERE id = $id";
+
+if ($sql_tipo == 'apoiador' && $sql_status != 'aprovado') {
+  die("Você ainda não foi aprovado para publicar plantas.");
+}
+
+
+$sql_usuario = "SELECT nome, imagem FROM usuarios WHERE id = $id";
+$result_usuario = $conn->query($sql_usuario);
 
 $nome = "";
 $imagem = "";
-if ($result_apoiador->num_rows > 0) {
-  $row = $result_apoiador->fetch_assoc();
+if ($result_usuario->num_rows > 0) {
+  $row = $result_usuario->fetch_assoc();
   $nome = $row['nome'];
   $imagem = $row['imagem'];
 }
@@ -36,32 +70,53 @@ if ($result_apoiador->num_rows > 0) {
       padding: 0;
       overflow-x: hidden;
     }
-
-    
   </style>
 
 </head>
 
 <body>
   <nav id="menu">
-    <ul class="menu-list">
-      <li><a href="index.php">Início</a></li>
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="ListaPlantas.php">Lista de plantas</a></li>
-      <li><a href="./identificar/identificar.php">indentificar</a></li>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
+
+
+    <div class="menu-center">
+      <ul class="menu-list">
+        <li><a href="index.php">Início</a></li>
+
+        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "apoiador"): ?>
+          <li><a href="#" id="active-menu">Cadastro de plantas</a></li>
+        <?php else: ?>
+        <?php endif; ?>
+
+        <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+
+        <li><a href="./identificar/identificar.php">Identificar planta</a></li>
+
+        <?php if (!isset($_SESSION['usuario_id'])): ?>
         <?php else: ?>
           <li><a href="avaliacao.php">Avalie aqui!</a></li>
-      <?php endif; ?>
-    </ul>
+        <?php endif; ?>
 
-    <?php if (!isset($_SESSION['apoiador_id'])): ?>
-    <?php else: ?>
-      <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
-        <img src="<?php echo htmlspecialchars($imagem) ?>" style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
-        <h5 style="margin:0;  display:inline-block; white-space:nowrap;"><?php echo htmlspecialchars($nome) ?></h5>
-      </a>
-    <?php endif; ?>
+        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "admin"): ?>
+          <li><a href="./admin/admin.php">Painel admin</a></li>
+        <?php else: ?>
+        <?php endif; ?>
+
+      </ul>
+    </div>
+
+
+    <!-- LADO DIREITO (Nos apoie / Perfil) -->
+    <div class="menu-right">
+      <?php if (!isset($_SESSION['usuario_id'])): ?>
+        <a href="login.php" class="apoie-btn">Login</a>
+      <?php else: ?>
+        <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
+          <img src="<?php echo htmlspecialchars($imagem) ?>"
+            style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+          <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+        </a>
+      <?php endif; ?>
+    </div>
 
   </nav>
 
@@ -215,7 +270,7 @@ if ($result_apoiador->num_rows > 0) {
           <h5>Contato</h5>
         </a>
       </div>
-            <div class="email">
+      <div class="email">
         <form id="form-email" style="display:flex; flex-direction:column; gap:4px; width:240px;">
 
           <input type="text" name="nome" placeholder="Nome"

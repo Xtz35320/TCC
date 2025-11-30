@@ -1,0 +1,107 @@
+/* ======== ESTILO GERAL ======== */
+body {
+    margin: 0;
+    padding: 20px;
+    background: #0f0f0f;
+    font-family: "Inter", Arial, sans-serif;
+    margin-top: 200px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 22px;
+    margin: 30px 0 15px;
+}
+img{
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+}
+
+/* ======== GRID DE CARDS ======== */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 40px;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 302px;
+}
+
+/* ======== CARD ======== */
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    border-color: #4e9f4b;
+}
+
+/* ======== TEXTO DOS CARDS ======== */
+.card h3 {
+    margin: 0 0 8px;
+}
+
+.card p {
+    margin: 0 0 1px;
+}
+
+/* ======== BOTÕES ======== */
+.card .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.action-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+/* Aprovar */
+.btn-approve {
+    background: #2d7f2d;
+    color: #fff;
+}
+
+.btn-approve:hover {
+    background: #3e9e3e;
+}
+
+/* Desativar */
+.btn-disable {
+    background: #d9b345;
+    color: #333;
+}
+
+.btn-disable:hover {
+    background: #f1cc5c;
+}
+
+/* Excluir */
+.btn-delete {
+    background: #c74242;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background: #e05757;
+}
+
+/* ======== CONTAINER ======== */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}

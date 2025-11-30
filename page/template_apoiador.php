@@ -1,5 +1,28 @@
 <?php
+session_start();
+
 include_once '../sql/conexao.php';
+
+if (!isset($_SESSION['usuario_id'])) {
+
+  $nome = "";
+} else {
+
+  $id = $_SESSION['usuario_id'];
+
+
+  $sql_apoiador = "SELECT nome, imagem FROM usuarios WHERE id = $id";
+  $result_apoiador = $conn->query($sql_apoiador);
+
+  $nome = "";
+  $imagem = "";
+  if ($result_apoiador->num_rows > 0) {
+    $row = $result_apoiador->fetch_assoc();
+    $nome = $row['nome'];
+    $imagem = $row['imagem'];
+  }
+}
+
 $id = $_GET['id'];
 
 // Consulta dos dados da planta
@@ -103,16 +126,47 @@ if ($result_doc->num_rows > 0) {
   </div>
 
   <nav id="menu">
-    <ul class="menu-list">
-      <li><a href="index.php">Início</a></li>
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="cadastro.php">Cadastro de plantas</a></li>
-      <li><a href="ListaPlantas.php">Lista de plantas</a></li>
-      <?php if (!isset($_SESSION['apoiador_id'])): ?>
+
+
+    <div class="menu-center">
+      <ul class="menu-list">
+        <li><a href="index.php">Início</a></li>
+
+        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "apoiador"): ?>
+          <li><a href="cadastro.php">Cadastro de plantas</a></li>
+        <?php else: ?>
+        <?php endif; ?>
+
+        <li><a href="ListaPlantas.php">Lista de plantas</a></li>
+
+        <li><a href="./identificar/identificar.php">Identificar planta</a></li>
+
+        <?php if (!isset($_SESSION['usuario_id'])): ?>
+        <?php else: ?>
+          <li><a href="avaliacao.php">Avalie aqui!</a></li>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_tipo'] === "admin"): ?>
+          <li><a href="./admin/admin.php">Painel admin</a></li>
+        <?php else: ?>
+        <?php endif; ?>
+
+      </ul>
+    </div>
+
+
+    <!-- LADO DIREITO (Nos apoie / Perfil) -->
+    <div class="menu-right">
+      <?php if (!isset($_SESSION['usuario_id'])): ?>
+        <a href="login.php" class="apoie-btn">Login</a>
       <?php else: ?>
-        <li><a href="avaliacao.php">Avalie aqui!</a></li>
+        <a href="./perfil.php" style="display:flex; align-items:center; gap:10px;">
+          <img src="<?php echo htmlspecialchars($imagem) ?>"
+            style="width:40px; height:40px; object-fit:cover; border-radius:50%;">
+          <h5 style="margin:0;"><?php echo htmlspecialchars($nome) ?></h5>
+        </a>
       <?php endif; ?>
-    </ul>
+    </div>
   </nav>
 
   <div class="cabeca">
